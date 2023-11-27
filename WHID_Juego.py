@@ -1,5 +1,10 @@
 from WHID_Clases import *
 from random import randint
+import sys
+
+novia = Boss('Ángela', 40, 60, 5, 50)
+padre = Personaje('Juan', 30, 50, 10)
+kevin = Protagonista('Kevin', 100, 50, 10, 0)
 
 suegro = Personaje('Suegro', 50, 20, 15)
 suegra = Personaje('Suegra', 50, 40, 20)
@@ -35,6 +40,18 @@ while juego_iniciado:
     elif personaje_aleatorio == suegra:
 
 
-resultado_ataque = primo.atacar(10)
-resultado_defensa = padre.defender(resultado_ataque)
-print(resultado_defensa)
+
+
+
+kevin.subir_nivel()
+print('')
+print('Te encuentras con tu novia.')
+print('Tiene estas características: ')
+print(novia)
+print('')
+print('Está muy enfadada pero no sabes porqué. Está esperando una respuesta por tu parte:')
+print('')
+ataque, daño = kevin.eleccion_ataque()
+novia.defender(kevin.ataque(daño))
+print('Muy bien, la has calmado.')
+kevin.subir_nivel()

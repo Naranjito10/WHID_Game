@@ -1,25 +1,24 @@
 class Personaje: 
 
-    def __init__(self, nombre, paciencia, empatía, labia, enfado):
+    def __init__(self, nombre, energia, empatia, dialectica):
         self.nombre = nombre
-        self.paciencia = paciencia
-        self.empatía = empatía
-        self.labia = labia
-        self.enfado = enfado
+        self.energia = energia
+        self.empatia = empatia
+        self.dialectica = dialectica
             
     def __str__(self):
-        return f"Nombre: {self.nombre}, Paciencia: {self.paciencia}, Empatía: {self.empatía}, Labia: {self.labia}, Enfado: {self.enfado}"
+        return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
     
     def atacar(self, ataque_propio):
         print(f"{self.nombre} ataca con una fuerza de {ataque_propio}")
-        resultado = self.labia * ataque_propio
+        resultado = self.dialectica * ataque_propio
         return resultado
     
     def defender(self, ataque_contrincante): 
         # self.paciencia - ataque_contrincante
-        resultado = self.paciencia - ataque_contrincante
-        self.paciencia = resultado
-        print(f"{self.nombre} defiende contra un ataque de {ataque_contrincante} y le baja la paciencia a {resultado}")
+        resultado = self.energia - ataque_contrincante
+        self.energia = resultado
+        print(f"{self.nombre} defiende contra un ataque de {ataque_contrincante} y le baja la energia a {resultado}")
         return resultado
         
 

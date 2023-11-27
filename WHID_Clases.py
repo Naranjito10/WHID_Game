@@ -14,7 +14,7 @@ class Personaje:
         return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
 
     def ataque(self, ataque_propio): 
-        resultado = self.labia * ataque_propio
+        resultado = self.dialectica * ataque_propio
         print(f"{self.nombre} ataca con una fuerza total de {resultado}")
         return resultado
     
@@ -57,8 +57,8 @@ class Protagonista(Personaje):
                   'arg_1': 'Yo?', 
                   'Fuerza': 10}]
 
-    def __init__(self, nombre, energia, empatía, labia, nivel):
-        super().__init__(nombre, energia, empatía, labia)
+    def __init__(self, nombre, energia, empatía, dialectica, nivel):
+        super().__init__(nombre, energia, empatía, dialectica)
 
         # Añadimos un atributo nuevo
         self.nivel = nivel
@@ -105,7 +105,7 @@ class Protagonista(Personaje):
         ataque_final = dict_ataque.get('arg_1')
         daño = dict_ataque.get('Fuerza')
         print(f"{self.nombre} ataca con '{ataque_final}' con una fuerza de {daño}")
-        return ataque_final, daño
+        return daño
         
     
 class Boss(Personaje):
@@ -113,12 +113,12 @@ class Boss(Personaje):
     ataques = {'Ataque Poderoso': 10, 
                'Ataque Débil': 5}
     
-    def __init__(self, nombre, energia, empatía, labia, enfado):
-        super().__init__(nombre, energia, empatía, labia)
+    def __init__(self, nombre, energia, empatia, dialectica, enfado):
+        super().__init__(nombre, energia, empatia, dialectica)
             
         self.enfado = enfado
 
     def __str__(self):
-        return f"Nombre: {self.nombre}, Energia: {self.energia}, Empatía: {self.empatía}, Labia: {self.labia}, Enfado: {self.enfado}"
+        return f"Nombre: {self.nombre}, Energia: {self.energia}, Empatía: {self.empatia}, Dialectica: {self.dialectica}, Enfado: {self.enfado}"
 
     

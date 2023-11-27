@@ -18,40 +18,47 @@ juego_iniciado = True
 lista_personajes = [padre, madre, suegro, suegra, cuñado, cuñada]
 
 def pelea_enemigo(prota, enemigo):
-    while prota.energia > 0 or enemigo.energia < 0:
-        enemigo.atacar
+    while prota.energia > 0 and enemigo.energia > 0:
+        daño = prota.eleccion_ataque()
+        novia.defender(prota.ataque(daño))
+
+nombre = input('¿Cuál es tu nombre?: ')
+prota = Protagonista(nombre, 100, 50, 10, 0)
 
 
 while juego_iniciado: 
-    print('''Tu novia te ha dicho que la has cagado, pero no sabes el porqué. 
-          Ella te responde, tú sabrás. Así que decides investigar para intentar arreglarlo. 
-          Te encontrarás con enemigos que frenarán tu búsqueda y aliados que te darán herramientas 
-          para mitigar la furia de tu novia. 
-          ¿Conseguirás adivinar por qué se enfadó? 
-          Y, lo más importante, ¿Conseguirás arreglarlo?''')
-    
-    nombre = input('¿Cuál es tu nombre?')
-    prota = Personaje(nombre, 50, 50, 1, 10)
-    personaje_aleatorio = randint(lista_personajes)
-    print(f'Te encuentras con la siguiente personas: {personaje_aleatorio}')
-    if personaje_aleatorio == suegro: 
-        pelea_enemigo(prota, suegro)
+    if prota.nivel == 0:
+        print(f'''Hola {nombre}. Tu novia te ha dicho que la has cagado, pero no sabes el porqué. 
+            Su respuesta a tu ignorancia: un contundente "Tú sabrás". 
+            Así que decides investigar para intentar arreglarlo. 
+            Te encontrarás con enemigos que frenarán tu búsqueda y aliados que te darán herramientas 
+            para mitigar la furia de tu novia. 
+            ¿Conseguirás adivinar por qué se enfadó? 
+            Y, lo más importante, ¿Conseguirás arreglarlo?''')
+        prota.subir_nivel()
+        print('__________________________________1')
+    else:     
+        print('Te encuentras con tu novia. Tiene estas características: ')
+        print(novia)
+        print('__________________________________2')
+        print('Está esperando una respuesta por tu parte:')
+        pelea_enemigo(prota, novia)
+        print('Muy bien, la has calmado.')
+        prota.subir_nivel()
 
-    elif personaje_aleatorio == suegra:
+
+
+        # personaje_aleatorio = randint(lista_personajes)
+        # print(f'Te encuentras con la siguiente personas: {personaje_aleatorio}')
+        # if personaje_aleatorio == suegro: 
+        #     pelea_enemigo(prota, suegro)
+
+        # elif personaje_aleatorio == suegra:
 
 
 
 
 
-kevin.subir_nivel()
-print('')
-print('Te encuentras con tu novia.')
-print('Tiene estas características: ')
-print(novia)
-print('')
-print('Está muy enfadada pero no sabes porqué. Está esperando una respuesta por tu parte:')
-print('')
-ataque, daño = kevin.eleccion_ataque()
-novia.defender(kevin.ataque(daño))
-print('Muy bien, la has calmado.')
-kevin.subir_nivel()
+
+
+

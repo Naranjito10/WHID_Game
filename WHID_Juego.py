@@ -1,9 +1,21 @@
 from WHID_Clases import *
+import sys
 
-primo = Personaje('Erik', 40, 60, 10, 5)
-padre = Personaje('Juan', 30, 50, 1, 10)
-print(padre)
+novia = Boss('Ángela', 40, 60, 5, 50)
+padre = Personaje('Juan', 30, 50, 10)
+kevin = Protagonista('Kevin', 100, 50, 10, 0)
 
-resultado_ataque = primo.atacar(10)
-resultado_defensa = padre.defender(resultado_ataque)
-print(resultado_defensa)
+
+
+kevin.subir_nivel()
+print('')
+print('Te encuentras con tu novia.')
+print('Tiene estas características: ')
+print(novia)
+print('')
+print('Está muy enfadada pero no sabes porqué. Está esperando una respuesta por tu parte:')
+print('')
+ataque, daño = kevin.eleccion_ataque()
+novia.defender(kevin.ataque(daño))
+print('Muy bien, la has calmado.')
+kevin.subir_nivel()

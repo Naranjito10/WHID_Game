@@ -17,18 +17,6 @@ class Personaje:
         self.energia = self.energia + energia
         self.empatia = self.empatia + empatia
         self.dialectica = self.dialectica + dialectica
-        for i in ataque.:
-            if i.nivel == 0:
-                if self.categoria == 'arg_cutre':
-                    self.arg_cutre.append(AtaqueProta)
-                elif self.categoria == 'arg_razonable':
-                    self.arg_razonable.append(AtaqueProta)
-                elif self.categoria == 'arg_toxico':
-                    self.arg_toxico.append(AtaqueProta)
-                elif self.categoria == 'acc_amistosa':
-                    self.acc_amistosa.append(AtaqueProta)
-                else:
-                    print('Hay un error')
 
     def esta_vivo(self):
         return self.energia > 0
@@ -37,10 +25,19 @@ class Personaje:
         self.energia = 0
         print(self.nombre, "se ha quedado sin energia para seguir discutiendo")
 
-    def ataque(self, ataque_propio): 
+    def atacar(self, ataque_propio): 
         resultado = self.dialectica * ataque_propio.daño()
         print(f"{self.nombre} ataca con una fuerza total de {resultado}")
         return resultado
+    
+    def atacar(self, enemigo):
+        daño = self.daño(enemigo)
+        enemigo.vida = enemigo.vida - daño
+        print(self.nombre, "ha realizado", daño, "puntos de daño a", enemigo.nombre)
+        if enemigo.esta_vivo():
+            print("Vida de", enemigo.nombre, "es", enemigo.vida)
+        else:
+            enemigo.morir()
     
     def defender(self, ataque_contrincante): 
         self.energia = self.energia - ataque_contrincante
@@ -58,34 +55,49 @@ class Protagonista(Personaje):
                     {'id': 1, 
                   'arg_1': 'Tienes razón', 
                   'Fuerza': 5, 
-                  'Estado': 'Quemado'}, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}, 
                   {'id': 2, 
                   'arg_1': 'Lo siento', 
-                  'Fuerza': 10}
+                  'Fuerza': 10, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}
                   ]
     
     lista_acc_amistosa = [
                     {'id': 1, 
                   'arg_1': 'Amo al cine', 
-                  'Fuerza': 5}, 
+                  'Fuerza': 5, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}, 
                   {'id': 2, 
                   'arg_1': 'Amo al teatro', 
-                  'Fuerza': 10}
+                  'Fuerza': 10, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}
                   ]
     
     lista_ata_toxico = [{'id': 1, 
                   'arg_1': 'Eres tú', 
-                  'Fuerza': 5}, 
+                  'Fuerza': 5, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}, 
                   {'id': 2, 
                   'arg_1': 'Soy así', 
-                  'Fuerza': 10}]
+                  'Fuerza': 10, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}]
     
     lista_arg_cutre = [{'id': 1, 
                   'arg_1': 'El qué?', 
-                  'Fuerza': 5}, 
+                  'Fuerza': 5, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}, 
                   {'id': 2, 
                   'arg_1': 'Yo?', 
-                  'Fuerza': 10}]
+                  'Fuerza': 10, 
+                  'Estado': 'Quemado'
+                  'Nivel 0'}]
 
     def __init__(self, nombre, energia, empatía, dialectica, nivel):
         super().__init__(nombre, energia, empatía, dialectica)

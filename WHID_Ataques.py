@@ -29,7 +29,7 @@ class Ataque:
         return self.lista_ataques_totales
 
 # CLASE DEL PROTA
-class AtaqueProta(Ataque):
+# class AtaqueProta(Ataque):
 
     lista_ataques_totales = []
 
@@ -38,45 +38,63 @@ class AtaqueProta(Ataque):
     arg_cutre = []
     arg_toxico = []
 
-    lista_ataques_prota = [arg_razonable, acc_amistosa, arg_cutre, arg_toxico] 
+    arg_razonable1 = []
+    acc_amistosa1 = []
+    arg_cutre1 = []
+    arg_toxico1 = []
 
     def __init__(self, nombre, daño, empatia, categoria, nivel):
         super().__init__(nombre, daño, empatia, categoria)
         self.nivel = nivel
         AtaqueProta.añadir_iniciales(AtaqueProta)
-    
+        if self.nivel == 0: 
+            if self.categoria == 'arg_cutre':
+                self.arg_cutre.append(AtaqueProta)
+            elif self.categoria == 'arg_razonable':
+                self.arg_razonable.append(AtaqueProta)
+            elif self.categoria == 'arg_toxico':
+                self.arg_toxico.append(AtaqueProta)
+            elif self.categoria == 'acc_amistosa':
+                self.acc_amistosa.append(AtaqueProta)
+            else:
+                print('Hay un error')
+        
+        if self.nivel == 1: 
+            if self.categoria == 'arg_cutre':
+                self.arg_cutre1.append(AtaqueProta)
+            elif self.categoria == 'arg_razonable':
+                self.arg_razonable1.append(AtaqueProta)
+            elif self.categoria == 'arg_toxico':
+                self.arg_toxico1.append(AtaqueProta)
+            elif self.categoria == 'acc_amistosa':
+                self.acc_amistosa1.append(AtaqueProta)
+            else:
+                print('Hay un error')
+        
     @classmethod
     def añadir_iniciales(cls, AtaqueProta):
         cls.lista_ataques_totales.append(AtaqueProta)
-        if cls.nivel == 0: 
-            if cls.categoria == 'arg_cutre':
-                cls.arg_cutre.append(AtaqueProta)
-            elif cls.categoria == 'arg_razonable':
-                cls.arg_razonable.append(AtaqueProta)
-            elif cls.categoria == 'arg_toxico':
-                cls.arg_toxico.append(AtaqueProta)
-            elif cls.categoria == 'acc_amistosa':
-                cls.acc_amistosa.append(AtaqueProta)
-            else:
-                print('Hay un error')
-
+        
+    def subir_nivel1(self, nivel_personaje): 
+        print(self.lista_ataques_totales)
+        for i in self.lista_ataques_totales:
+            AtaqueProta.lista_clases(i, nivel_personaje)
+    
     @classmethod
-    def subir_nivel(cls, nivel): 
-        print(cls.lista_ataques_totales)
-        for i in cls.lista_ataques_totales:
-            if i.nivel == nivel:
-                if i.categoria == 'arg_cutre':
-                    self.arg_cutre.append(i)
-                elif i.categoria == 'arg_razonable':
-                    self.arg_razonable.append(i)
-                elif i.categoria == 'arg_toxico':
-                    self.arg_toxico.append(i)
-                elif i.categoria == 'acc_amistosa':
-                    self.acc_amistosa.append(i)
-                else:
-                    print('Hay un error')
+    def lista_clases(cls, clase, nivel):
+        if clase.nivel == nivel:
+            if clase.categoria == 'arg_cutre':
+                cls.arg_cutre.append(clase)
+            elif clase.categoria == 'arg_razonable':
+                cls.arg_razonable.append(clase)
+            elif clase.categoria == 'arg_toxico':
+                cls.arg_toxico.append(clase)
+            elif clase.categoria == 'acc_amistosa':
+                cls.acc_amistosa.append(clase)
             else:
-                continue
+                print('Hay un error de categoria')
+        else:
+            print('Hay un error de nivel')
 
     def __str__(self):
         return f"Nombre: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"    
@@ -105,26 +123,28 @@ class AtaqueProta(Ataque):
 ataque1 = AtaqueProta('"Tienes Razón"', 0.5, 10, 'arg_razonable', 0)
 ataque2 = AtaqueProta('"No es verdad"', 1, -5, 'arg_cutre', 0)
 ataque3 = AtaqueProta('"tóxico man"', 2, -10, 'arg_toxico', 0)
-ataque4 = AtaqueProta('"vamos al cine"', 1.5, 5, 'acc_amistosa', 1)
+ataque4 = AtaqueProta('"vamos al cine"', 1.5, 5, 'acc_amistosa', 0)
+ataque5 = AtaqueProta('"vamos al cine"', 1.5, 5, 'acc_amistosa', 0)
 
-# print(AtaqueProta.lista_ataques_prota)
+print(AtaqueProta.lista_ataques_totales)
+print(AtaqueProta.lista_ataques_prota)
 ataque1.subir_nivel(1)
 print(ataque1)
 print(AtaqueProta.lista_ataques_prota)
 
 
 
-class AtaqueBoss(Ataque):
+# class AtaqueBoss(Ataque):
 
-    lista_ataques_boss = []
+#     lista_ataques_boss = []
 
-    def __init__(self, nombre, daño, empatia, categoria):
-        super().__init__(nombre, daño, empatia, categoria)
+#     def __init__(self, nombre, daño, empatia, categoria):
+#         super().__init__(nombre, daño, empatia, categoria)
         
-    def habilidades_inicio(self):
-        pass
+#     def habilidades_inicio(self):
+#         pass
 
-class AtaqueProta(Ataque):
+# class AtaqueEnemigo(Ataque):
 
     lista_ataques_enemigo = []
 

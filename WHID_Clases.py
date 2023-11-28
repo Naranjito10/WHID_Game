@@ -13,14 +13,44 @@ class Personaje:
     def __str__(self):
         return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
 
+    def subir_nivel(self, energia, empatia, dialectica):
+        self.energia = self.energia + energia
+        self.empatia = self.empatia + empatia
+        self.dialectica = self.dialectica + dialectica
+        for i in ataque.:
+            if i.nivel == 0:
+                if self.categoria == 'arg_cutre':
+                    self.arg_cutre.append(AtaqueProta)
+                elif self.categoria == 'arg_razonable':
+                    self.arg_razonable.append(AtaqueProta)
+                elif self.categoria == 'arg_toxico':
+                    self.arg_toxico.append(AtaqueProta)
+                elif self.categoria == 'acc_amistosa':
+                    self.acc_amistosa.append(AtaqueProta)
+                else:
+                    print('Hay un error')
+
+    def esta_vivo(self):
+        return self.energia > 0
+    
+    def morir(self):
+        self.energia = 0
+        print(self.nombre, "se ha quedado sin energia para seguir discutiendo")
+
     def ataque(self, ataque_propio): 
-        resultado = self.dialectica * ataque_propio
+        resultado = self.dialectica * ataque_propio.daño()
         print(f"{self.nombre} ataca con una fuerza total de {resultado}")
         return resultado
     
     def defender(self, ataque_contrincante): 
         self.energia = self.energia - ataque_contrincante
         print(f"{self.nombre} se defiende contra un ataque de {ataque_contrincante} y le baja la energia a {self.energia}")
+        if self.energia < 0:
+            print('Has acabado con la energia del enemigo')
+        elif estado : 
+            # Aplicar estado
+            print()
+        
         
 class Protagonista(Personaje):
 

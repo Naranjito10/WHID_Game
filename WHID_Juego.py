@@ -36,15 +36,14 @@ while juego_iniciado:
             ¿Conseguirás adivinar por qué se enfadó? 
             Y, lo más importante, ¿Conseguirás arreglarlo?''')
         prota.subir_nivel()
-        print('__________________________________1')
     else:     
-        print('Te encuentras con tu novia. Tiene estas características: ')
+        print('\nTe encuentras con tu novia. Tiene estas características: ')
         print(novia)
-        print('__________________________________2')
-        print('Está esperando una respuesta por tu parte:')
+        print('\nEstá esperando una respuesta por tu parte:')
         pelea_enemigo(prota, novia)
         print('Muy bien, la has calmado.')
         prota.subir_nivel()
+
 
 
 

@@ -9,26 +9,16 @@ class Personaje:
         self.energia = energia
         self.empatia = empatia
         self.dialectica = dialectica
+        self.estado = 0
             
     def __str__(self):
         return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
-
-    def subir_nivel(self, energia, empatia, dialectica):
-        self.energia = self.energia + energia
-        self.empatia = self.empatia + empatia
-        self.dialectica = self.dialectica + dialectica
-        for i in ataque.:
-            if i.nivel == 0:
-                if self.categoria == 'arg_cutre':
-                    self.arg_cutre.append(AtaqueProta)
-                elif self.categoria == 'arg_razonable':
-                    self.arg_razonable.append(AtaqueProta)
-                elif self.categoria == 'arg_toxico':
-                    self.arg_toxico.append(AtaqueProta)
-                elif self.categoria == 'acc_amistosa':
-                    self.acc_amistosa.append(AtaqueProta)
-                else:
-                    print('Hay un error')
+        
+    # def subir_nivel(self, energia, empatia, dialectica):
+    #     self.energia = self.energia + energia
+    #     self.empatia = self.empatia + empatia
+    #     self.dialectica = self.dialectica + dialectica
+    #     print(f"Has subido de nivel. Tus características son: Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}")
 
     def esta_vivo(self):
         return self.energia > 0
@@ -37,81 +27,59 @@ class Personaje:
         self.energia = 0
         print(self.nombre, "se ha quedado sin energia para seguir discutiendo")
 
-    def ataque(self, ataque_propio): 
-        resultado = self.dialectica * ataque_propio.daño()
+    def ataque(self): 
+        daño, estado = self.eleccion_ataque()
+        print('\n')
+        resultado = self.dialectica * daño
         print(f"{self.nombre} ataca con una fuerza total de {resultado}")
         return resultado
     
-    def defender(self, ataque_contrincante): 
+    def defender(self, ataque_contrincante, estado): 
         self.energia = self.energia - ataque_contrincante
-        print(f"{self.nombre} se defiende contra un ataque de {ataque_contrincante} y le baja la energia a {self.energia}")
+        print(f"{self.nombre} recibe el argumento {ataque_contrincante} y le baja la energia a {self.energia}")
         if self.energia < 0:
             print('Has acabado con la energia del enemigo')
-        elif estado : 
-            # Aplicar estado
-            print()
+        elif estado != 0:
+            self.aplicar_estado(estado)
+    
+    # def trigger_estado(self, estado):
+    #     if estado.probabilidad_trigger > random.random():
+    #         print(f"{self.nombre} ha recibido daño de {estado.nombre}")
+    #         self.estado = estado
+    
+    def aplicar_estado(self, estado):
         
+        print(f"{self.nombre} ha recibido el estado {estado.nombre}")
+        self.estado = estado
+
         
 class Protagonista(Personaje):
 
-    lista_arg_razonable = [
-                    {'id': 1, 
-                  'arg_1': 'Tienes razón', 
-                  'Fuerza': 5, 
-                  'Estado': 'Quemado'}, 
-                  {'id': 2, 
-                  'arg_1': 'Lo siento', 
-                  'Fuerza': 10}
-                  ]
-    
-    lista_acc_amistosa = [
-                    {'id': 1, 
-                  'arg_1': 'Amo al cine', 
-                  'Fuerza': 5}, 
-                  {'id': 2, 
-                  'arg_1': 'Amo al teatro', 
-                  'Fuerza': 10}
-                  ]
-    
-    lista_ata_toxico = [{'id': 1, 
-                  'arg_1': 'Eres tú', 
-                  'Fuerza': 5}, 
-                  {'id': 2, 
-                  'arg_1': 'Soy así', 
-                  'Fuerza': 10}]
-    
-    lista_arg_cutre = [{'id': 1, 
-                  'arg_1': 'El qué?', 
-                  'Fuerza': 5}, 
-                  {'id': 2, 
-                  'arg_1': 'Yo?', 
-                  'Fuerza': 10}]
+    lista_ataques_prota = []
 
-    def __init__(self, nombre, energia, empatía, dialectica, nivel):
-        super().__init__(nombre, energia, empatía, dialectica)
-
-        # Añadimos un atributo nuevo
+    def __init__(self, nombre, energia, empatia, dialectica, nivel):
+        super().__init__(nombre, energia, empatia, dialectica)
         self.nivel = nivel
-    
+        seleccionar_nuevo_ataque(0)
+        seleccionar_nuevo_ataque(0)
+        seleccionar_nuevo_ataque(0)
+        seleccionar_nuevo_ataque(0)
+        
+
     def subir_nivel(self):
         self.nivel += 1
         if self.nivel == 1:
-            print(f'Ahora eres nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit inicial: ')
+            print(f'\nAhora eres nivel {self.nivel}, tus características son: ')
+            print(self)
+            print(f'\nEscoge entre estas dos habilidades para añadir a tu kit inicial: ')
+            
         else: 
-            print(f'Acabas de subir al nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit: ')
-        categoria, habilidad_escogida, dict_escogido = añadir_habilidad_nivel(self.nivel)
-        if categoria == 'arg_razonables':
-            self.lista_arg_razonable.append(dict_escogido)
-        elif categoria == 'acc_amistosa':
-            self.lista_acc_amistosa.append(dict_escogido)
-        elif categoria == 'ata_toxico':
-            self.lista_ata_toxico.append(dict_escogido)
-        elif categoria == 'arg_cutre':
-            self.lista_arg_cutre.append(dict_escogido)
+            print(f'\nAcabas de subir al nivel {self.nivel}, tus características son: ')
+            print(self)
+            print(f'\nEscoge entre estas dos habilidades para añadir a tu kit: ')
 
-        print(f'Muy bien, has añadido la habilidad {habilidad_escogida} en la categoría {categoria}')
-
-    
+        seleccionar_nuevo_ataque(self.nivel)
+        
     
     def eleccion_ataque(self):
         print('''Acciones disponibles: 
@@ -122,33 +90,101 @@ class Protagonista(Personaje):
               ''')
         ataque_elegido = input('Qué deseas realizar?: ')
         if ataque_elegido == '1':
-            categoria_elegida = self.lista_arg_razonable
+            categoria_elegida = AtaqueProta.arg_razonable
         elif ataque_elegido == '2':
-            categoria_elegida = self.lista_acc_amistosa
+            categoria_elegida = AtaqueProta.acc_amistosa
         elif ataque_elegido == '3':
-            categoria_elegida = self.lista_ata_toxico        
+            categoria_elegida = AtaqueProta.arg_toxico     
         elif ataque_elegido == '4':
-            categoria_elegida = self.lista_arg_cutre
-        
-        numero_aleatorio = random.choice(range(0, len(categoria_elegida) - 1))
-        dict_ataque = categoria_elegida[numero_aleatorio]
-        ataque_final = dict_ataque.get('arg_1')
-        daño = dict_ataque.get('Fuerza')
-        print(f"{self.nombre} ataca con '{ataque_final}' con una fuerza de {daño}")
-        return daño
-        
-    
+            categoria_elegida = AtaqueProta.arg_cutre
+        ataque_random = random.choice(categoria_elegida)
+        probabilidad = ataque_random.estado.probabilidad_afectar
+        if probabilidad > 0.1:
+            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño} y aplica el estado {ataque_random.estado.nombre}")
+            return ataque_random.daño, ataque_random.estado
+        else:
+            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño}")
+            return ataque_random.daño, 0
+         
+
+
 class Boss(Personaje):
 
-    ataques = {'Ataque Poderoso': 10, 
-               'Ataque Débil': 5}
-    
-    def __init__(self, nombre, energia, empatia, dialectica, enfado):
+    lista_ataques_boss = []
+
+    lista_veredictos = [
+        'Le diste like a una amiga en instagram.',
+        'Te vio hablando con una amiga en la calle.',
+        'No le escribiste mientras estabas de viaje.',
+        'Ha visto que sigues hablando con tu ex de forma cariñosa.',
+        'Te vio online en whatsapp y que no le contestaste.',
+        'Te acabaste la nutella que quedaba.',
+        'Te dejaste la luz del baño encendida.',
+        'Te dejaste la tapa del váter subida.',
+        '¿Has utilizado mi champú ultra caro?',
+        '¿Te has visto más capítulos de nuestra serie sin mí?',
+        '¿Por qué te has gastado 100€ euros en un videojuego?',
+        'Ayer en vez de venir a dormir conmigo te quedaste hasta las tantas jugando al lol con tus amigos.'
+    ]
+
+    def __init__(self, nombre, energia, empatia, dialectica, enfado, nivel):
         super().__init__(nombre, energia, empatia, dialectica)
-            
         self.enfado = enfado
+        self.nivel = nivel
+        seleccionar_nuevo_ataque_boss(0)
+        seleccionar_nuevo_ataque_boss(0)
+        seleccionar_nuevo_ataque_boss(0)
+        seleccionar_nuevo_ataque_boss(0)
 
     def __str__(self):
         return f"Nombre: {self.nombre}, Energia: {self.energia}, Empatía: {self.empatia}, Dialectica: {self.dialectica}, Enfado: {self.enfado}"
 
+    def subir_nivel(self):
+        self.nivel += 1
+        if self.nivel == 1:
+            print(f'\nAhora eres nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit inicial: ')
+        else: 
+            print(f'\nAcabas de subir al nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit: ')
+
+        seleccionar_nuevo_ataque(self.nivel)
     
+    def eleccion_ataque(self):
+        ataque_random = random.choice(AtaqueBoss.lista_ataques_boss)
+        print('Ataque boss')
+        probabilidad = ataque_random.estado.probabilidad_afectar
+        print(ataque_random.estado.nombre)
+        print(probabilidad)
+        if probabilidad > random.random():
+            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica} y aplica el estado {ataque_random.estado.nombre}")
+            return ataque_random.daño, ataque_random.estado
+        else:
+            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica}")
+            return ataque_random.daño, 0
+   
+        
+        
+class Enemigo(Personaje):
+    
+        lista_ataques_enemigo = []
+        
+        def __init__(self, nombre, energia, empatia, dialectica, enfado, ataque_enemigo):
+            super().__init__(nombre, energia, empatia, dialectica)
+            self.enfado = enfado
+            self.ataque_enemigo = ataque_enemigo
+    
+        def __str__(self):
+            return f"Nombre: {self.nombre}, Energia: {self.energia}, Empatía: {self.empatia}, Dialectica: {self.dialectica}, Enfado: {self.enfado}"
+    
+        # def eleccion_ataque(self):
+        # daño =  self.ataque_enemigo.daño
+        # suegro.ataque_enemigo.dañoself.lista_ataques_boss)
+        # print('Ataque boss')
+        # probabilidad = ataque_random.estado.probabilidad_afectar
+        # print(ataque_random.estado.nombre)
+        # print(probabilidad)
+        # if probabilidad > random.random():
+        #     print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica} y aplica el estado {ataque_random.estado.nombre}")
+        #     return daño, ataque_random.estado
+        # else:
+        #     print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica}")
+        #     return daño, 0

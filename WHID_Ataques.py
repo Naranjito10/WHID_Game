@@ -199,7 +199,7 @@ class AtaqueEnemigo(Ataque):
 
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Categoria: {self.categoria}, Estado: {self.estado}"
-        
+
 
 arg_razonables = [{'id': 1, 
                   'arg_1': 'Tienes razón', 

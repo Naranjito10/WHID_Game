@@ -13,6 +13,7 @@ class Personaje:
             
     def __str__(self):
         return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
+
         
     # def subir_nivel(self, energia, empatia, dialectica):
     #     self.energia = self.energia + energia
@@ -26,6 +27,7 @@ class Personaje:
     def morir(self):
         self.energia = 0
         print(self.nombre, "se ha quedado sin energia para seguir discutiendo")
+
 
     def ataque(self): 
         daño, estado = self.eleccion_ataque()
@@ -55,7 +57,9 @@ class Personaje:
         
 class Protagonista(Personaje):
 
+
     lista_ataques_prota = []
+
 
     def __init__(self, nombre, energia, empatia, dialectica, nivel):
         super().__init__(nombre, energia, empatia, dialectica)

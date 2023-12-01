@@ -1,23 +1,39 @@
 import random
 
-class Estados: 
-    def __init__(self, nombre, probabilidad_dar, daño, probabilidad_afectar):
+class Estado: 
+    def __init__(self, nombre, probabilidad_afectar, daño, probabilidad_trigger):
         self.nombre = nombre
-        self.probabilidad_dar = probabilidad_dar
-        self.daño = daño
         self.probabilidad_afectar = probabilidad_afectar
+        self.daño = daño
+        self.probabilidad_trigger = probabilidad_trigger
 
+    def trigger_estado(self, personaje):
+        if self.probabilidad_trigger > random.random():
+            personaje.estado = self
+            print(f"{personaje.nombre} ha sido afectado por el estado {self.nombre}")
+        else:
+            print(f"{personaje.nombre} no ha sido afectado por el estado {self.nombre}")
+
+quemado = Estado('Quemado', 0.30, 5, 0.30)
+paralizado = Estado('Paralizado', 0.30, 5, 0.30)
+
+# _________________________________________________________________________________________________________________________
+
+# CLASE DE ATAQUE
 class Ataque: 
+    contador_id = 1
+    # lista_ataques_totales = []    
 
-    # lista_ataques_totales = []
-
-    def __init__(self, nombre, daño, empatia, categoria):
+    def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, estado: str = None, enfado: int = None):
+        self.id = Ataque.contador_id  # Asigna el id actual y luego incrementa el contador
+        Ataque.contador_id += 1
         self.nombre = nombre
         self.daño = daño
         self.empatia = empatia
         self.categoria = categoria
+        self.estado = estado
+        self.enfado = enfado
         # self.lista_ataques_totales.append(Ataque)
-        
 
     def atacar_1(self):
         return f"{self.nombre} hace {self.daño} de daño."
@@ -28,145 +44,162 @@ class Ataque:
     def get_lista_ataques_totales(self):
         return self.lista_ataques_totales
 
-# CLASE DEL PROTA
-# class AtaqueProta(Ataque):
+# _________________________________________________________________________________________________________________________
 
-    lista_ataques_totales = []
+# CLASE DEL PROTA
+class AtaqueProta(Ataque):
 
     arg_razonable = []
     acc_amistosa = []
     arg_cutre = []
     arg_toxico = []
 
-    arg_razonable1 = []
-    acc_amistosa1 = []
-    arg_cutre1 = []
-    arg_toxico1 = []
-
-    def __init__(self, nombre, daño, empatia, categoria, nivel):
-        super().__init__(nombre, daño, empatia, categoria)
+    def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = None, enfado: int = None):
+        super().__init__(nombre, daño, empatia, categoria, estado, enfado)
         self.nivel = nivel
-        AtaqueProta.añadir_iniciales(AtaqueProta)
-        if self.nivel == 0: 
-            if self.categoria == 'arg_cutre':
-                self.arg_cutre.append(AtaqueProta)
-            elif self.categoria == 'arg_razonable':
-                self.arg_razonable.append(AtaqueProta)
-            elif self.categoria == 'arg_toxico':
-                self.arg_toxico.append(AtaqueProta)
-            elif self.categoria == 'acc_amistosa':
-                self.acc_amistosa.append(AtaqueProta)
-            else:
-                print('Hay un error')
-        
-        if self.nivel == 1: 
-            if self.categoria == 'arg_cutre':
-                self.arg_cutre1.append(AtaqueProta)
-            elif self.categoria == 'arg_razonable':
-                self.arg_razonable1.append(AtaqueProta)
-            elif self.categoria == 'arg_toxico':
-                self.arg_toxico1.append(AtaqueProta)
-            elif self.categoria == 'acc_amistosa':
-                self.acc_amistosa1.append(AtaqueProta)
-            else:
-                print('Hay un error')
-        
-    @classmethod
-    def añadir_iniciales(cls, AtaqueProta):
-        cls.lista_ataques_totales.append(AtaqueProta)
-        
-    def subir_nivel1(self, nivel_personaje): 
-        print(self.lista_ataques_totales)
-        for i in self.lista_ataques_totales:
-            AtaqueProta.lista_clases(i, nivel_personaje)
-    
-    @classmethod
-    def lista_clases(cls, clase, nivel):
-        if clase.nivel == nivel:
-            if clase.categoria == 'arg_cutre':
-                cls.arg_cutre.append(clase)
-            elif clase.categoria == 'arg_razonable':
-                cls.arg_razonable.append(clase)
-            elif clase.categoria == 'arg_toxico':
-                cls.arg_toxico.append(clase)
-            elif clase.categoria == 'acc_amistosa':
-                cls.acc_amistosa.append(clase)
-            else:
-                print('Hay un error de categoria')
-        else:
-            print('Hay un error de nivel')
 
     def __str__(self):
-        return f"Nombre: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"    
+        return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"    
+
+
+# PROTA - CREAR LISTA DE ATAQUES DESORDENADA
+def lista_ataques_desordenada():
+    lista_ataques = [
+    AtaqueProta(nombre = '"Tienes Razón 000"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 0, estado = quemado),
+    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = quemado),
+    AtaqueProta(nombre = '"tóxico man 000"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = quemado),
+    AtaqueProta(nombre = '"vamos al cine 000"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = quemado),
+    AtaqueProta(nombre = '"Tienes Razón 111"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado),
+    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = paralizado),
+    AtaqueProta(nombre = '"tóxico man 111"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = paralizado),
+    AtaqueProta(nombre = '"vamos al cine 111"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 1, estado = paralizado),
+    AtaqueProta(nombre = '"Tienes Razón 222"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = paralizado),
+    AtaqueProta(nombre = '"No 222"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = paralizado),
+    AtaqueProta(nombre = '"tóxico man 222"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 2, estado = paralizado),
+    AtaqueProta(nombre = '"vamos al cine 222"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 2, estado = paralizado),
+    AtaqueProta(nombre = '"Tienes Razón 333"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 3, estado = paralizado),
+    AtaqueProta(nombre = '"No 333"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 3, estado = paralizado),
+    AtaqueProta(nombre = '"tóxico man 333"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 3, estado = paralizado),
+    AtaqueProta(nombre = '"vamos al cine 333"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 3, estado = paralizado),
+    ]
+
+    random.shuffle(lista_ataques) 
+    return lista_ataques
+
+# PROTA - CREAR GENERADOR DE ATAQUES POR NIVEL
+def crear_ataque_nivel(nivel): 
+    for generador_clase in list(generador_clase for generador_clase in lista_ataques_prota if generador_clase.nivel == nivel):
+        if generador_clase in lista_ataques_utilizados:
+            continue
+        lista_ataques_utilizados.append(generador_clase)
+        yield generador_clase
+
+# PROTA - SELECCIONAR NUEVO ATAQUE
+def seleccionar_nuevo_ataque(nivel):
+    generador_clase = crear_ataque_nivel(nivel)
+    if nivel == 0: 
+        añadir_habilidad_categoria(next(generador_clase))
+    else:
+        clase1 = next(generador_clase)
+        clase2 = next(generador_clase)
+        opcion_escogida = input(f'''¿Qué habilidad escoges?:
+                - 1. {clase1}
+                - 2. {clase2}
+                ''')
+        if opcion_escogida == '1':
+            lista_ataques_utilizados.append(clase1)
+            añadir_habilidad_categoria(clase1)
+            print(f'Muy bien, has añadido la habilidad {clase1.nombre} en la categoría {clase1.categoria}')
+        elif opcion_escogida == '2':
+            lista_ataques_utilizados.append(clase2)
+            añadir_habilidad_categoria(clase2)
+            print(f'Muy bien, has añadido la habilidad {clase2.nombre} en la categoría {clase2.categoria}')
+
+# PROTA - AÑADIR HABILIDAD A LA CATEGORÍA 
+def añadir_habilidad_categoria(generador):
+    categoria = generador.categoria
+    if categoria == 'arg_cutre':
+        AtaqueProta.arg_cutre.append(generador)
+    elif categoria == 'arg_razonable':
+        AtaqueProta.arg_razonable.append(generador)
+    elif categoria == 'arg_toxico':
+        AtaqueProta.arg_toxico.append(generador)
+    elif categoria == 'acc_amistosa':
+        AtaqueProta.acc_amistosa.append(generador)
+    
+
+# PROTA - LISTA DE ATAQUES DESORDENADA
+lista_ataques_prota = lista_ataques_desordenada()
+lista_ataques_utilizados = []
+
+# _________________________________________________________________________________________________________________________
+
+# CLASE DEL BOSS
+class AtaqueBoss(Ataque):
+
+    lista_ataques_boss = []
+
+    def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = None, enfado: int = None):
+        super().__init__(nombre, daño, empatia, categoria, estado, enfado)
+        self.nivel = nivel
         
-    def subir_nivel111(self):
-        for i in self.lista_ataques_totales:
-            if i.nivel == 0:
-                if self.categoria == 'arg_cutre':
-                    self.arg_cutre.append(AtaqueProta)
-                elif self.categoria == 'arg_razonable':
-                    self.arg_razonable.append(AtaqueProta)
-                elif self.categoria == 'arg_toxico':
-                    self.arg_toxico.append(AtaqueProta)
-                elif self.categoria == 'acc_amistosa':
-                    self.acc_amistosa.append(AtaqueProta)
-                else:
-                    print('Hay un error')
-                self.lista_ataques_prota.append()
-        
-    def habilidades_subir_nivel(self):
-        pass
+    def __str__(self):
+        return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"
+    
 
-    def habilidades_inicio(self):
-        pass
+# BOSS - CREAR LISTA DE ATAQUES BOSS DESORDENADA
+def lista_ataques_boss_desordenada():
+    lista_ataques = [
+    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 0, estado = quemado),
+    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = quemado),
+    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = paralizado),
+    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = paralizado),
+    AtaqueBoss('"Tú sabrás 11"', 2, -10, 'arg_toxico', 1),
+    AtaqueBoss('"Haz lo que quieras 11"', 1.5, 5, 'acc_amistosa', 1),
+    AtaqueBoss('"tóxico BOSS 11"', 1.5, 5, 'acc_amistosa', 1),
+    AtaqueBoss('"Tú sabrás 22"', 2, -10, 'arg_toxico', 2),
+    AtaqueBoss('"Haz lo que quieras 22"', 1.5, 5, 'acc_amistosa', 2),
+    AtaqueBoss('"Tú sabrás 33"', 1, -5, 'arg_cutre', 3),
+    AtaqueBoss('"Haz lo que quieras 33"', 1, -5, 'arg_cutre', 3)
+    ]
 
-ataque1 = AtaqueProta('"Tienes Razón"', 0.5, 10, 'arg_razonable', 0)
-ataque2 = AtaqueProta('"No es verdad"', 1, -5, 'arg_cutre', 0)
-ataque3 = AtaqueProta('"tóxico man"', 2, -10, 'arg_toxico', 0)
-ataque4 = AtaqueProta('"vamos al cine"', 1.5, 5, 'acc_amistosa', 0)
-ataque5 = AtaqueProta('"vamos al cine"', 1.5, 5, 'acc_amistosa', 0)
+    random.shuffle(lista_ataques) 
+    return lista_ataques
 
-print(AtaqueProta.lista_ataques_totales)
-print(AtaqueProta.lista_ataques_prota)
-ataque1.subir_nivel(1)
-print(ataque1)
-print(AtaqueProta.lista_ataques_prota)
+def crear_ataque_nivel_boss(nivel): 
+    for generador_clase in list(generador_clase for generador_clase in lista_ataques_boss if generador_clase.nivel == nivel):
+        if generador_clase in lista_ataques_boss_utilizados:
+            continue
+        lista_ataques_boss_utilizados.append(generador_clase)
+        yield generador_clase
 
+def seleccionar_nuevo_ataque_boss(nivel):
+    generador_clase = crear_ataque_nivel_boss(nivel)
+    añadir_habilidad_lista_boss(next(generador_clase))
 
+# BOSS - AÑADIR HABILIDAD A LA CATEGORÍA 
+def añadir_habilidad_lista_boss(generador):
+    AtaqueBoss.lista_ataques_boss.append(generador)
+    # print(f'Se añadió la habilidad {generador.nombre} a la lista')
 
-# class AtaqueBoss(Ataque):
+# BOSS - LISTA DE ATAQUES DESORDENADA
+lista_ataques_boss = lista_ataques_boss_desordenada()
+lista_ataques_boss_utilizados = []
 
-#     lista_ataques_boss = []
+# _________________________________________________________________________________________________________________________
 
-#     def __init__(self, nombre, daño, empatia, categoria):
-#         super().__init__(nombre, daño, empatia, categoria)
-        
-#     def habilidades_inicio(self):
-#         pass
-
-# class AtaqueEnemigo(Ataque):
+# CLASE DEL ENEMIGO
+class AtaqueEnemigo(Ataque):
 
     lista_ataques_enemigo = []
 
-    def __init__(self, nombre, daño, empatia, categoria):
-        super().__init__(nombre, daño, empatia, categoria)
+    def __init__(self, nombre: str, daño: int, estado: int = None, enfado: int = None):
+        super().__init__(nombre, daño, estado, enfado)
+        self.enfado = enfado
+
+    def __str__(self):
+        return f"Ataque: {self.nombre}, Daño: {self.daño}, Categoria: {self.categoria}, Estado: {self.estado}"
         
-    def habilidades_inicio(self):
-        pass
-        
-        
-    # Probar de hacer los ataques con clase
-
-
-
-# print(lista_ataques[0].atacar_1())
-# print(ataque1.get_lista_ataques_totales())
-
-
-estados = [{'id': 1, 
-                  'arg_1': 'Tienes razón', 
-                  'Fuerza': 5,
-                  'Categoria': 'arg_razonables'}]
 
 arg_razonables = [{'id': 1, 
                   'arg_1': 'Tienes razón', 
@@ -244,34 +277,6 @@ arg_cutre = [{'id': 1,
                   'Fuerza': 10,
                   'Categoria': 'arg_cutre'}]
 
-def añadir_habilidad_nivel(nivel):
-    lista_habilidades_nivel = [[1, 2],
-                               [3, 4]]
-    nivel_escogido = lista_habilidades_nivel[nivel - 1]
-    ataque_final1 = 0
-    ataque_final2 = 0
-    while ataque_final1 == ataque_final2:
-        numero_aleatorio1 = random.choice(nivel_escogido)
-        numero_aleatorio2 = random.choice(nivel_escogido)
-        lista_categorias = [arg_cutre, arg_razonables, acc_amistosa, ata_toxico]
-        categoria_seleccionada1 = lista_categorias[random.choice(range(0, len(lista_categorias) - 1))]
-        categoria_seleccionada2 = lista_categorias[random.choice(range(0, len(lista_categorias) - 1))]
-        dict_seleccionado1 = list(e for e in categoria_seleccionada1 if e['id']  == numero_aleatorio1)[0]
-        dict_seleccionado2 = list(e for e in categoria_seleccionada2 if e['id']  == numero_aleatorio2)[0]
-        ataque_final1 = dict_seleccionado1.get('arg_1')
-        ataque_final2 = dict_seleccionado2.get('arg_1')
-        categoria1 = dict_seleccionado1.get('Categoria')
-        categoria2 = dict_seleccionado2.get('Categoria')
-        # añadir el pop de la lista para que no se vuelva a escoger
-    
-    print(f'''Habilidades para escoger: 
-            - 1. {ataque_final1} 
-            - 2. {ataque_final2}''')
-    opcion_escogida = input('¿Qué habilidad escoges?: ')
-    if opcion_escogida == '1': 
-        return categoria1, ataque_final1, dict_seleccionado1
-    elif opcion_escogida == '2': 
-        return categoria2, ataque_final2, dict_seleccionado2
 
     
 

@@ -28,38 +28,44 @@ class Personaje:
         self.energia = 0
         print(self.nombre, "se ha quedado sin energia para seguir discutiendo")
 
-
-    def ataque(self): 
-        daño, estado = self.eleccion_ataque()
-        print('\n')
-        resultado = self.dialectica * daño
-        print(f"{self.nombre} ataca con una fuerza total de {resultado}")
-        return resultado
     
-    def defender(self, ataque_contrincante, estado): 
-        self.energia = self.energia - ataque_contrincante
-        print(f"{self.nombre} recibe el argumento {ataque_contrincante} y le baja la energia a {self.energia}")
-        if self.energia < 0:
+    def defender(self, ataque_contrincante, dialectica): 
+        daño = ataque_contrincante.daño * dialectica
+        self.energia = self.energia - daño
+        print(f"{self.nombre} recibe el argumento {ataque_contrincante} con una fuerza total de {daño} y le baja la energia a {self.energia}")
+        if self.energia <= 0:
             print('Has acabado con la energia del enemigo')
-        elif estado != 0:
-            self.aplicar_estado(estado)
+        elif self.energia > 0:
+            self.comprobar_afectar_estado(ataque_contrincante)
     
-    # def trigger_estado(self, estado):
-    #     if estado.probabilidad_trigger > random.random():
-    #         print(f"{self.nombre} ha recibido daño de {estado.nombre}")
-    #         self.estado = estado
-    
-    def aplicar_estado(self, estado):
-        
-        print(f"{self.nombre} ha recibido el estado {estado.nombre}")
-        self.estado = estado
+    def comprobar_afectar_estado(self, ataque):
+        if ataque.estado != 0:
+            if self.estado == 0 and ataque.estado.probabilidad_afectar_estado():
+                self.estado = ataque.estado
+                print(f"{self.nombre} ha sido afectado por el estado {ataque.estado.nombre}")
 
+            elif self.estado != 0 and self.estado != ataque.estado:
+                if ataque.estado.probabilidad_afectar_estado():
+                    self.estado = ataque.estado
+                    print(f"{self.nombre} ha sido afectado por el estado {ataque.estado.nombre}")
+                else:
+                    print(f"{self.nombre} no ha sido afectado por el estado {ataque.estado.nombre}")
         
+
+    def trigger_estado(self):
+        if self.estado != 0:
+            print(self.estado)
+            print(self.estado.daño)
+            if self.estado.probabilidad_trigger_estado:
+                self.energia -= self.estado.daño
+                print(f"{self.nombre} ha recibido {self.estado.daño} de daño por el estado {self.estado.nombre}")
+            else:
+                print(f"{self.nombre} no ha recibido daño por el estado {self.estado.nombre}")
+
+
+
+# PERSONAJES  
 class Protagonista(Personaje):
-
-
-    lista_ataques_prota = []
-
 
     def __init__(self, nombre, energia, empatia, dialectica, nivel):
         super().__init__(nombre, energia, empatia, dialectica)
@@ -102,16 +108,10 @@ class Protagonista(Personaje):
         elif ataque_elegido == '4':
             categoria_elegida = AtaqueProta.arg_cutre
         ataque_random = random.choice(categoria_elegida)
-        probabilidad = ataque_random.estado.probabilidad_afectar
-        if probabilidad > 0.1:
-            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño} y aplica el estado {ataque_random.estado.nombre}")
-            return ataque_random.daño, ataque_random.estado
-        else:
-            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño}")
-            return ataque_random.daño, 0
+        return ataque_random
          
 
-
+# BOSS
 class Boss(Personaje):
 
     lista_ataques_boss = []
@@ -146,24 +146,17 @@ class Boss(Personaje):
     def subir_nivel(self):
         self.nivel += 1
         if self.nivel == 1:
-            print(f'\nAhora eres nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit inicial: ')
+            print(f'\nAhora el Boss es nivel {self.nivel}')
         else: 
-            print(f'\nAcabas de subir al nivel {self.nivel}, escoge entre estas dos habilidades para añadir a tu kit: ')
+            print(f'\nAcabas el Boss es nivel {self.nivel}')
 
         seleccionar_nuevo_ataque(self.nivel)
     
     def eleccion_ataque(self):
         ataque_random = random.choice(AtaqueBoss.lista_ataques_boss)
         print('Ataque boss')
-        probabilidad = ataque_random.estado.probabilidad_afectar
-        print(ataque_random.estado.nombre)
-        print(probabilidad)
-        if probabilidad > random.random():
-            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica} y aplica el estado {ataque_random.estado.nombre}")
-            return ataque_random.daño, ataque_random.estado
-        else:
-            print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica}")
-            return ataque_random.daño, 0
+        print(f"{self.nombre} ataca con '{ataque_random.nombre}' con una fuerza de {ataque_random.daño * self.dialectica}")
+        return ataque_random
    
         
         

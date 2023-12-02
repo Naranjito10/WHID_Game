@@ -1,21 +1,25 @@
 import random
 
 class Estado: 
-    def __init__(self, nombre, probabilidad_afectar, daño, probabilidad_trigger):
+    def __init__(self, nombre: str, probabilidad_afectar: int, probabilidad_trigger: int, contador: int, daño: int = None, efecto: str = None):
         self.nombre = nombre
         self.probabilidad_afectar = probabilidad_afectar
-        self.daño = daño
         self.probabilidad_trigger = probabilidad_trigger
+        self.contador = contador
+        self.daño = daño
+        self.efecto = efecto
 
-    def trigger_estado(self, personaje):
-        if self.probabilidad_trigger > random.random():
-            personaje.estado = self
-            print(f"{personaje.nombre} ha sido afectado por el estado {self.nombre}")
-        else:
-            print(f"{personaje.nombre} no ha sido afectado por el estado {self.nombre}")
+    def probabilidad_trigger_estado(self):
+        return self.probabilidad_afectar > random.random()
+    
+    def probabilidad_afectar_estado(self):
+        return self.probabilidad_afectar > random.random()
 
-quemado = Estado('Quemado', 0.30, 5, 0.30)
-paralizado = Estado('Paralizado', 0.30, 5, 0.30)
+quemado = Estado(nombre = 'Quemado', probabilidad_afectar = 0.5, probabilidad_trigger = 0.30, contador = 1, daño = 2, efecto = 'Reducir daño')
+paralizado = Estado(nombre = 'Paralizado', probabilidad_afectar = 0.5, probabilidad_trigger = 0.30, contador = 1, efecto = 'Stun')
+veneno = Estado(nombre = 'Veneno', probabilidad_afectar = 0.5, probabilidad_trigger = 0.30, contador = 1, daño = 5)
+
+efectos = ['Reducir daño', 'Stun']
 
 # _________________________________________________________________________________________________________________________
 
@@ -66,20 +70,20 @@ class AtaqueProta(Ataque):
 def lista_ataques_desordenada():
     lista_ataques = [
     AtaqueProta(nombre = '"Tienes Razón 000"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 0, estado = quemado),
-    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = quemado),
-    AtaqueProta(nombre = '"tóxico man 000"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = quemado),
+    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = paralizado),
+    AtaqueProta(nombre = '"tóxico man 000"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = veneno),
     AtaqueProta(nombre = '"vamos al cine 000"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = quemado),
     AtaqueProta(nombre = '"Tienes Razón 111"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado),
-    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = paralizado),
-    AtaqueProta(nombre = '"tóxico man 111"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = paralizado),
+    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = veneno),
+    AtaqueProta(nombre = '"tóxico man 111"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = quemado),
     AtaqueProta(nombre = '"vamos al cine 111"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 1, estado = paralizado),
-    AtaqueProta(nombre = '"Tienes Razón 222"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = paralizado),
-    AtaqueProta(nombre = '"No 222"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = paralizado),
+    AtaqueProta(nombre = '"Tienes Razón 222"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = veneno),
+    AtaqueProta(nombre = '"No 222"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = quemado),
     AtaqueProta(nombre = '"tóxico man 222"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 2, estado = paralizado),
-    AtaqueProta(nombre = '"vamos al cine 222"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 2, estado = paralizado),
-    AtaqueProta(nombre = '"Tienes Razón 333"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 3, estado = paralizado),
+    AtaqueProta(nombre = '"vamos al cine 222"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 2, estado = veneno),
+    AtaqueProta(nombre = '"Tienes Razón 333"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 3, estado = quemado),
     AtaqueProta(nombre = '"No 333"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 3, estado = paralizado),
-    AtaqueProta(nombre = '"tóxico man 333"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 3, estado = paralizado),
+    AtaqueProta(nombre = '"tóxico man 333"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 3, estado = veneno),
     AtaqueProta(nombre = '"vamos al cine 333"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 3, estado = paralizado),
     ]
 
@@ -113,7 +117,7 @@ def seleccionar_nuevo_ataque(nivel):
         elif opcion_escogida == '2':
             lista_ataques_utilizados.append(clase2)
             añadir_habilidad_categoria(clase2)
-            print(f'Muy bien, has añadido la habilidad {clase2.nombre} en la categoría {clase2.categoria}')
+            print(f'\nMuy bien, has añadido la habilidad {clase2.nombre} en la categoría {clase2.categoria}')
 
 # PROTA - AÑADIR HABILIDAD A LA CATEGORÍA 
 def añadir_habilidad_categoria(generador):
@@ -154,13 +158,13 @@ def lista_ataques_boss_desordenada():
     AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = quemado),
     AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = paralizado),
     AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = paralizado),
-    AtaqueBoss('"Tú sabrás 11"', 2, -10, 'arg_toxico', 1),
-    AtaqueBoss('"Haz lo que quieras 11"', 1.5, 5, 'acc_amistosa', 1),
-    AtaqueBoss('"tóxico BOSS 11"', 1.5, 5, 'acc_amistosa', 1),
-    AtaqueBoss('"Tú sabrás 22"', 2, -10, 'arg_toxico', 2),
-    AtaqueBoss('"Haz lo que quieras 22"', 1.5, 5, 'acc_amistosa', 2),
-    AtaqueBoss('"Tú sabrás 33"', 1, -5, 'arg_cutre', 3),
-    AtaqueBoss('"Haz lo que quieras 33"', 1, -5, 'arg_cutre', 3)
+    # AtaqueBoss('"Tú sabrás 11"', 2, -10, 'arg_toxico', 1),
+    # AtaqueBoss('"Haz lo que quieras 11"', 1.5, 5, 'acc_amistosa', 1),
+    # AtaqueBoss('"tóxico BOSS 11"', 1.5, 5, 'acc_amistosa', 1),
+    # AtaqueBoss('"Tú sabrás 22"', 2, -10, 'arg_toxico', 2),
+    # AtaqueBoss('"Haz lo que quieras 22"', 1.5, 5, 'acc_amistosa', 2),
+    # AtaqueBoss('"Tú sabrás 33"', 1, -5, 'arg_cutre', 3),
+    # AtaqueBoss('"Haz lo que quieras 33"', 1, -5, 'arg_cutre', 3)
     ]
 
     random.shuffle(lista_ataques) 

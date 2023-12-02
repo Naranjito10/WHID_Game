@@ -1,6 +1,5 @@
 from WHID_Clases import *
 from WHID_Ataques import *
-from WHID_Personajes import *
 from random import randint
 import sys
 
@@ -84,13 +83,17 @@ def pelea_enemigo(prota, enemigo):
     while prota.esta_vivo() and enemigo.esta_vivo():
         print(f'La energía de {prota.nombre} es {prota.energia}')
         print(f'La energía de {enemigo.nombre} es {enemigo.energia}')
-        if prota.estado != 0:
-            prota.estado.trigger_estado(prota)
-        enemigo.defender(prota.ataque(), estado)
-        print('\n')
-        daño, estado = enemigo.eleccion_ataque()
-        print('\n')
-        prota.defender(enemigo.ataque(daño), estado)
+
+        ataque_escogido_prota = prota.eleccion_ataque()
+
+        ataque_escogido_enemigo = enemigo.eleccion_ataque()
+
+        prota.trigger_estado()
+        prota.defender(ataque_escogido_enemigo, enemigo.dialectica)
+        enemigo.trigger_estado()
+        enemigo.defender(ataque_escogido_prota, prota.dialectica)
+       
+
         print('\n__________________________________________________________\n')
     
 

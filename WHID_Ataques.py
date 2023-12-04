@@ -41,9 +41,6 @@ class Ataque:
     def atacar_1(self):
         return f"{self.nombre} hace {self.daño} de daño."
 
-    def agrega_estado(self, estado):
-        pass
-
     def get_lista_ataques_totales(self):
         return self.lista_ataques_totales
 
@@ -158,15 +155,15 @@ def lista_ataques_boss_desordenada():
     AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 10, nivel = 0, estado = quemado),
     AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 10, nivel = 0, estado = paralizado),
     AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 10, nivel = 0, estado = paralizado),
-    # AtaqueBoss('"Tú sabrás 11"', 2, -10, 'arg_toxico', 1),
-    # AtaqueBoss('"Haz lo que quieras 11"', 1.5, 5, 'acc_amistosa', 1),
-    # AtaqueBoss('"tóxico BOSS 11"', 1.5, 5, 'acc_amistosa', 1),
-    # AtaqueBoss('"Tú sabrás 22"', 2, -10, 'arg_toxico', 2),
-    # AtaqueBoss('"Haz lo que quieras 22"', 1.5, 5, 'acc_amistosa', 2),
-    # AtaqueBoss('"Tú sabrás 33"', 1, -5, 'arg_cutre', 3),
-    # AtaqueBoss('"Haz lo que quieras 33"', 1, -5, 'arg_cutre', 3)
+    AtaqueBoss(nombre = '"Tú sabrás 11"', daño = 0.5, empatia = 10, nivel = 1, estado = quemado),
+    AtaqueBoss(nombre = '"Haz lo que quieras 11"', daño = 0.5, empatia = 10, nivel = 1, estado = quemado),
+    AtaqueBoss(nombre = '"tóxico BOSS 11"', daño = 0.5, empatia = 10, nivel = 1, estado = paralizado),
+    AtaqueBoss(nombre = '"no me hables 11"', daño = 0.5, empatia = 10, nivel = 1, estado = paralizado),
+    AtaqueBoss(nombre = '"Tú sabrás 22"', daño = 0.5, empatia = 10, nivel = 2, estado = quemado),
+    AtaqueBoss(nombre = '"Haz lo que quieras 22"', daño = 0.5, empatia = 10, nivel = 2, estado = quemado),
+    AtaqueBoss(nombre = '"tóxico BOSS 22"', daño = 0.5, empatia = 10, nivel = 2, estado = paralizado),
+    AtaqueBoss(nombre = '"no me hables 22"', daño = 0.5, empatia = 10, nivel = 2, estado = paralizado),
     ]
-
     random.shuffle(lista_ataques) 
     return lista_ataques
 
@@ -197,14 +194,16 @@ class AtaqueEnemigo(Ataque):
 
     lista_ataques_enemigo = []
 
-    def __init__(self, nombre: str, daño: int, nivel: int = 0, empatia: int =  None, estado: int = None, enfado: int = None):
+    def __init__(self, nombre: str, daño: int, nivel: int = 0, empatia: int =  None, estado: str = None, enfado: int = None):
         super().__init__(nombre, daño, empatia, estado, enfado)
-        self.enfado = enfado
         self.nivel = nivel
 
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Categoria: {self.categoria}, Estado: {self.estado}"
 
+
+
+# OTROS
 
 arg_razonables = [{'id': 1, 
                   'arg_1': 'Tienes razón', 

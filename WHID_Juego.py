@@ -3,72 +3,41 @@ from WHID_Ataques import *
 from random import randint
 import sys
 
-
-# Inicio Juego
-juego_iniciado = True
-print('Bienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
-nombre_prota = input('Hola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
-nombre_novia = input('Cómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
-contador_eventos = 0
-rondas = 0
-motivo_del_enfado = 0
-
-# CREACIÓN DE PERSONAJES PRINCIPALES
-prota = Protagonista(nombre = nombre_prota, energia = 100, empatia = 10, dialectica = 10, nivel = 0)
-
-# CREACIÓN DE NPC ALIADOS
-padre = Enemigo('Padre', 40, 60, 5, 50, 0)
-madre = Enemigo('Madre', 40, 60, 5, 50, 0)
-
-
-
-# CREACIÓN DE NPC
-lista_npc_aliados = [padre, madre]
-lista_npc_enemigos = [suegro, suegra, cuñado, cuñada]
-lista_npc_totales = lista_npc_aliados + lista_npc_enemigos
-
+# FUNCIONES
 
 # SELECCIÓN DE DIFICULTAD
 def personajes_segun_dificultad(dificultad):
     # CREACIÓN DE BOSS
     if dificultad == 'Fácil':
-        novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 50, nivel = 0)
+        dificultad_boss = 0
+        dificultad_enemigos = 0
     elif dificultad == 'Normal':
-        novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 50, nivel = 0)
+        dificultad_boss = 0
+        dificultad_enemigos = 1
     elif dificultad == 'Difícil':
-        novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 50, nivel = 1)
+        dificultad_boss = 1
+        dificultad_enemigos = 1
     elif dificultad == 'Realista':
-        novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 50, nivel = 2)
+        dificultad_boss = 2
+        dificultad_enemigos = 2
 
+    # CREACIÓN BOSS
+    novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 50, nivel = dificultad_boss)
+    
     # CREACIÓN DE NPC ENEMIGOS
+
     ataque_suegro = AtaqueEnemigo(nombre = '"No vales tanto como para estar con ella"', daño = 0.5, nivel = 0, enfado = 0, estado = quemado)
+    suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegro, nivel = dificultad_enemigos)
+
     ataque_suegra = AtaqueEnemigo(nombre = '"¿Aún no te ha dejado?"', daño = 0.5,  nivel = 0, enfado = 0, estado = quemado)
+    suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegra nivel = dificultad_enemigos)
+
     ataque_cuñado = AtaqueEnemigo(nombre = '"No sé de qué me hablas. Seguro que le has puesto los cuernos..."', daño = 5,  nivel = 0, enfado = 0, estado = paralizado)
+    cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñado nivel = dificultad_enemigos)
+
     ataque_cuñada = AtaqueEnemigo(nombre = '"Eres un inútil."', daño = 0.5, nivel = 0, enfado = 0, estado = paralizado)
-
-    if dificultad == 'Fácil':
-        suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegro)
-        suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegra)
-        cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñado)
-        cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñada)
-
-    elif dificultad == 'Normal':
-        suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegro)
-        suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegra)
-        cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñado)
-        cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñada)
-
-    elif dificultad == 'Difícil':
-        suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegro)
-        suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegra)
-        cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñado)
-        cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñada)
-
-    elif dificultad == 'Realista':  
-        suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegro)
-        suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_suegra)
-        cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñado)
-        cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñada)
+    cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, ataque_enemigo = ataque_cuñada nivel = dificultad_enemigos)
+    
 
     return novia, suegro, suegra, cuñado, cuñada
 
@@ -90,6 +59,7 @@ def seleccion_dificultad():
     else:
         print('No has seleccionado una dificultad válida. Vuelve a intentarlo.')
         seleccion_dificultad()
+
 
 # SELECCIÓN VEREDICTO
 def seleccion_motivos(novia, motivo, seleccion_dificultad):
@@ -162,10 +132,33 @@ def pelea_enemigo(prota, enemigo):
         prota.defender(ataque_escogido_enemigo, enemigo.dialectica)
         enemigo.trigger_estado()
         enemigo.defender(ataque_escogido_prota, prota.dialectica)
-       
-
         print('\n__________________________________________________________\n')
     
+# _________________________________________________________________________________________________________________________
+
+
+# Inicio Juego
+juego_iniciado = True
+print('Bienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
+nombre_prota = input('Hola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
+nombre_novia = input('Cómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
+contador_eventos = 0
+rondas = 0
+motivo_del_enfado = 0
+
+# CREACIÓN DE PERSONAJES PRINCIPALES
+prota = Protagonista(nombre = nombre_prota, energia = 100, empatia = 10, dialectica = 10, nivel = 0)
+
+# CREACIÓN DE NPC ALIADOS
+padre = Aliado('Padre', 0)
+madre = Aliado('Madre', 0)
+
+novia, suegro, suegra, cuñado, cuñada = personajes_segun_dificultad()
+
+# CREACIÓN DE NPC
+lista_npc_aliados = [padre, madre]
+lista_npc_enemigos = [suegro, suegra, cuñado, cuñada]
+lista_npc_totales = lista_npc_aliados + lista_npc_enemigos
 
 # _________________________________________________________________________________________________________________________
 

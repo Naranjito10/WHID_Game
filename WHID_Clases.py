@@ -15,11 +15,11 @@ class Personaje:
         return f"Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}"
 
         
-    # def subir_nivel(self, energia, empatia, dialectica):
-    #     self.energia = self.energia + energia
-    #     self.empatia = self.empatia + empatia
-    #     self.dialectica = self.dialectica + dialectica
-    #     print(f"Has subido de nivel. Tus características son: Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}")
+    def subir_nivel_características(self, energia, empatia, dialectica):
+        self.energia = self.energia + energia
+        self.empatia = self.empatia + empatia
+        self.dialectica = self.dialectica + dialectica
+        print(f"Has subido de nivel. Tus características son: Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}")
 
     def esta_vivo(self):
         return self.energia > 0
@@ -117,10 +117,10 @@ class Boss(Personaje):
     lista_ataques_boss = []
 
     lista_veredictos = [
-        'Le diste like a una amiga en instagram.',
-        'Te vio hablando con una amiga en la calle.',
-        'No le escribiste mientras estabas de viaje.',
-        'Ha visto que sigues hablando con tu ex de forma cariñosa.',
+        'Le diste like a una amiga en instagram.', 
+        'Te vio hablando con una amiga en la calle.', 
+        'No le escribiste mientras estabas de viaje.', 
+        'Ha visto que sigues hablando con tu ex de forma cariñosa.', 
         'Te vio online en whatsapp y que no le contestaste.',
         'Te acabaste la nutella que quedaba.',
         'Te dejaste la luz del baño encendida.',
@@ -171,6 +171,11 @@ class Enemigo(Personaje):
     
         def __str__(self):
             return f"Nombre: {self.nombre}, Energia: {self.energia}, Empatía: {self.empatia}, Dialectica: {self.dialectica}, Enfado: {self.enfado}"
+        
+        def eleccion_ataque(self):
+            print('Ataque Enemigo: ')
+            print(f"{self.nombre} ataca con '{self.ataque_enemigo.nombre}' con una fuerza de {self.ataque_enemigo.daño * self.dialectica}")
+            return self.ataque_enemigo
     
         # def eleccion_ataque(self):
         # daño =  self.ataque_enemigo.daño

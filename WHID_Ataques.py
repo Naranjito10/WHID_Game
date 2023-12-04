@@ -28,13 +28,12 @@ class Ataque:
     contador_id = 1
     # lista_ataques_totales = []    
 
-    def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, estado: str = None, enfado: int = None):
+    def __init__(self, nombre: str, daño: int, empatia: int, estado: str = None, enfado: int = None):
         self.id = Ataque.contador_id  # Asigna el id actual y luego incrementa el contador
         Ataque.contador_id += 1
         self.nombre = nombre
         self.daño = daño
         self.empatia = empatia
-        self.categoria = categoria
         self.estado = estado
         self.enfado = enfado
         # self.lista_ataques_totales.append(Ataque)
@@ -59,8 +58,9 @@ class AtaqueProta(Ataque):
     arg_toxico = []
 
     def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = None, enfado: int = None):
-        super().__init__(nombre, daño, empatia, categoria, estado, enfado)
+        super().__init__(nombre, daño, empatia, categoria, estado)
         self.nivel = nivel
+        self.categoria = categoria
 
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"    
@@ -143,21 +143,21 @@ class AtaqueBoss(Ataque):
 
     lista_ataques_boss = []
 
-    def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = None, enfado: int = None):
-        super().__init__(nombre, daño, empatia, categoria, estado, enfado)
+    def __init__(self, nombre: str, daño: int, nivel: int = 0, empatia: int = None, estado: str = None, enfado: int = None):
+        super().__init__(nombre, daño, estado, empatia, enfado)
         self.nivel = nivel
         
     def __str__(self):
-        return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Categoria: {self.categoria}, Nivel: {self.nivel}"
+        return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Nivel: {self.nivel}"
     
 
 # BOSS - CREAR LISTA DE ATAQUES BOSS DESORDENADA
 def lista_ataques_boss_desordenada():
     lista_ataques = [
-    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 0, estado = quemado),
-    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = quemado),
-    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = paralizado),
-    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = paralizado),
+    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, empatia = 10, nivel = 0, estado = quemado),
+    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 10, nivel = 0, estado = quemado),
+    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 10, nivel = 0, estado = paralizado),
+    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 10, nivel = 0, estado = paralizado),
     # AtaqueBoss('"Tú sabrás 11"', 2, -10, 'arg_toxico', 1),
     # AtaqueBoss('"Haz lo que quieras 11"', 1.5, 5, 'acc_amistosa', 1),
     # AtaqueBoss('"tóxico BOSS 11"', 1.5, 5, 'acc_amistosa', 1),
@@ -197,9 +197,10 @@ class AtaqueEnemigo(Ataque):
 
     lista_ataques_enemigo = []
 
-    def __init__(self, nombre: str, daño: int, estado: int = None, enfado: int = None):
-        super().__init__(nombre, daño, estado, enfado)
+    def __init__(self, nombre: str, daño: int, nivel: int = 0, empatia: int =  None, estado: int = None, enfado: int = None):
+        super().__init__(nombre, daño, empatia, estado, enfado)
         self.enfado = enfado
+        self.nivel = nivel
 
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Categoria: {self.categoria}, Estado: {self.estado}"

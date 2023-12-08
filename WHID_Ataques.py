@@ -84,22 +84,22 @@ class AtaqueProta(Ataque):
 # PROTA - CREAR LISTA DE ATAQUES DESORDENADA
 def lista_ataques_desordenada():
     lista_ataques = [
-    AtaqueProta(nombre = '"Tienes Razón 000"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 0, estado = quemado, enfado = 0),
-    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 0, estado = paralizado, enfado = 2),
-    AtaqueProta(nombre = '"tóxico man 000"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 0, estado = veneno, enfado = 3),
-    AtaqueProta(nombre = '"vamos al cine 000"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = quemado, enfado = 4),
-    AtaqueProta(nombre = '"Tienes Razón 111"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado, enfado = 1),
-    AtaqueProta(nombre = '"No 000"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = veneno, enfado = 2),
-    AtaqueProta(nombre = '"tóxico man 111"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = quemado, enfado = 6),
-    AtaqueProta(nombre = '"vamos al cine 111"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 1, estado = paralizado, enfado = 0),
-    AtaqueProta(nombre = '"Tienes Razón 222"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = veneno, enfado = 0),
-    AtaqueProta(nombre = '"No 222"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = quemado, enfado = 2),
-    AtaqueProta(nombre = '"tóxico man 222"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 2, estado = paralizado, enfado = 8),
-    AtaqueProta(nombre = '"vamos al cine 222"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 2, estado = veneno, enfado = 0),
-    AtaqueProta(nombre = '"Tienes Razón 333"', daño = 0.5, empatia = 10, categoria = 'arg_razonable', nivel = 3, estado = quemado, enfado = 0),
-    AtaqueProta(nombre = '"No 333"', daño = 0.5, empatia = 10, categoria = 'arg_cutre', nivel = 3, estado = paralizado, enfado = 4),
-    AtaqueProta(nombre = '"tóxico man 333"', daño = 0.5, empatia = 10, categoria = 'arg_toxico', nivel = 3, estado = veneno, enfado = 10),
-    AtaqueProta(nombre = '"vamos al cine 333"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 3, estado = paralizado, enfado = 0)
+    AtaqueProta(nombre = '"Entiendo que estés preocupada, pero dime por favor qué está sucediendo para poder ayudarte”', daño = 0.5, empatia = 5, categoria = 'arg_razonable', nivel = 0, estado = quemado, enfado = 0),
+    AtaqueProta(nombre = '“No sé qué he hecho”', daño = 0.5, empatia = 0, categoria = 'arg_cutre', nivel = 0, estado = paralizado, enfado = 0),
+    AtaqueProta(nombre = '“Creo que es culpa tuya”', daño = 1, empatia = -5, categoria = 'arg_toxico', nivel = 0, estado = veneno, enfado = 0),
+    AtaqueProta(nombre = '"Apoyas su argumento amistosamente"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = quemado, enfado = 0),
+    AtaqueProta(nombre = '"“Resultaría más sencillo resolver este problema si me dijeras de donde viene el enfado”"', daño = 1, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado, enfado = 1),
+    AtaqueProta(nombre = '"Creo que no he hecho nada mal"', daño = 1, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = veneno, enfado = 2),
+    AtaqueProta(nombre = '"“¿Estás segura de lo que estás diciendo?”"', daño = 1, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = quemado, enfado = 6),
+    AtaqueProta(nombre = '"Escuchas activamente"', daño = 1, empatia = 10, categoria = 'acc_amistosa', nivel = 1, estado = paralizado, enfado = 0),
+    AtaqueProta(nombre = '"Tienes Razón 222"', daño = 2, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = veneno, enfado = 0),
+    AtaqueProta(nombre = '"No 222"', daño = 2, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = quemado, enfado = 2),
+    AtaqueProta(nombre = '"tóxico man 222"', daño = 2, empatia = 10, categoria = 'arg_toxico', nivel = 2, estado = paralizado, enfado = 8),
+    AtaqueProta(nombre = '"vamos al cine 222"', daño = 2, empatia = 10, categoria = 'acc_amistosa', nivel = 2, estado = veneno, enfado = 0),
+    AtaqueProta(nombre = '"Tienes Razón 333"', daño = 3, empatia = 10, categoria = 'arg_razonable', nivel = 3, estado = quemado, enfado = 0),
+    AtaqueProta(nombre = '"No 333"', daño = 3, empatia = 10, categoria = 'arg_cutre', nivel = 3, estado = paralizado, enfado = 4),
+    AtaqueProta(nombre = '"tóxico man 333"', daño = 3, empatia = 10, categoria = 'arg_toxico', nivel = 3, estado = veneno, enfado = 10),
+    AtaqueProta(nombre = '"vamos al cine 333"', daño = 3, empatia = 10, categoria = 'acc_amistosa', nivel = 3, estado = paralizado, enfado = 0)
     ]
 
     random.shuffle(lista_ataques) 

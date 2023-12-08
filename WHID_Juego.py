@@ -39,8 +39,12 @@ def personajes_segun_dificultad(dificultad):
     cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
     
     ataque_cuñada = AtaqueEnemigo(nombre = '"Eres un inútil."', daño = 0.5, nivel = 0, enfado = 0, estado = paralizado, empatia = 0)
-    cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
-    return novia, suegro, suegra, cuñado, cuñada
+    amigo_novia = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
+
+    ataque_cuñada = AtaqueEnemigo(nombre = '"Eres un inútil."', daño = 0.5, nivel = 0, enfado = 0, estado = paralizado, empatia = 0)
+    amiga_novia = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0,dialectica = 5, enfado = 50, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
+
+    return novia, suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia
 
 def seleccion_dificultad():
     respuesta = ''
@@ -99,70 +103,62 @@ def encuentro_boss(prota, novia, rondas, motivo, dificultad):
             sys.exit()
         else:
             print('El veredicto ha sido negativo. Debes seguir investigando.')
-
-# EVENTOS ALEATORIOS
-def evento_aleatorio(lista_aliados, lista_enemigos, dificultad, prota, novia):
-    # hacer que no pueda encontrarse con las mismas personas cada vez que vuelve aquí
-    lista_npc = []
-    if dificultad == 1:
-        personaje_aleatorio1 = random.choice(lista_aliados)
-        lista_npc.append(personaje_aleatorio1)
-        personaje_aleatorio2 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio2)
+# CREADOR EVENTOS
+def crear_eventos(lista_npc_totales, lista_aliados, lista_enemigos, dificultad):
     
-    if dificultad == 2:
-        personaje_aleatorio1 = random.choice(lista_aliados)
-        lista_npc.append(personaje_aleatorio1)
-        personaje_aleatorio2 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio2)
-        personaje_aleatorio3 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio3)
+    # AÑADIR NPC ENEMIGO ALEATORIOS
+    for i in range(dificultad + 2):
+        i = random.choice(lista_enemigos) if i not in lista_npc_totales else lista_enemigos
+        lista_npc_totales.append(i)
 
-    if dificultad == 3:
-        personaje_aleatorio1 = random.choice(lista_aliados)
-        lista_npc.append(personaje_aleatorio1)
-        personaje_aleatorio2 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio2)
-        personaje_aleatorio3 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio3)
-        personaje_aleatorio4 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio4)
+    # AÑADIR NPC ALIADO ALEATORIOS
+    cuenta_atras = [5, 4, 3, 2, 1]
+    print(cuenta_atras[dificultad])
 
-    if dificultad == 4:
-        personaje_aleatorio1 = random.choice(lista_aliados)
-        lista_npc.append(personaje_aleatorio1)
-        personaje_aleatorio2 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio2)
-        personaje_aleatorio3 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio3)
-        personaje_aleatorio4 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio4)
-        personaje_aleatorio5 = random.choice(lista_enemigos)
-        lista_npc.append(personaje_aleatorio5)
+    for i in range(cuenta_atras[dificultad]):
+        i = random.choice(lista_aliados) if i not in lista_npc_totales else lista_aliados
+        lista_npc_totales.append(i)
         
-    personaje_aleatorio = random.choice(lista_npc)
-
+# EVENTOS ALEATORIOS
+def evento_aleatorio(lista_npc_totales, prota, novia):
+    personaje_aleatorio = random.choice(lista_npc_totales)
+    print(f'Te encuentras con la siguiente persona: {personaje_aleatorio.nombre}\n')
     if personaje_aleatorio in lista_npc_enemigos: 
-        print(f'Te encuentras con la siguiente persona: {personaje_aleatorio.nombre}\n\n')
         print(f'Debes interactuar con {personaje_aleatorio.nombre}. ¿Qué haces?\n')
         pelea_enemigo(prota, personaje_aleatorio, novia)
         prota.subir_nivel()
     else:
-        print(f'Te encuentras con la siguiente persona: {personaje_aleatorio.nombre}\n')
         personaje_aleatorio.eleccion_personaje(prota, novia)
+    lista_npc_totales.remove(personaje_aleatorio)
+
 
 # SISTEMA DE COMBATE
+def informacion_batalla(prota, enemigo, novia, turno):
+    print(f'La energía de {prota.nombre} es ***{prota.energia}***')
+    print(f'\nLa energía de {enemigo.nombre} es ***{enemigo.energia}***')
+    if turno == 0 and enemigo.__class__.__name__ == 'Boss':
+        print(f'El enfado de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
+        print(f'Con tu novia la empatía afecta directamente a su enfado. Ten cuidado.')
+
+    elif turno != 0 and enemigo.__class__.__name__ == 'Boss':
+        print(f'El enfado de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
+    
+    elif turno == 0 and enemigo.__class__.__name__ != 'Boss':
+        print(f'La empatía de {enemigo.nombre} es ***{enemigo.empatia}***')
+        print('Si llegas a 50 el enemigo empatizará contigo, pero si llegas a -50 tu novia se enfadará más')                                                                                                                               
+        print(f'\nEl enfado de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
+
+    elif turno != 0 and enemigo.__class__.__name__ != 'Boss':
+        print(f'La empatía de {enemigo.nombre} es ***{enemigo.empatia}***')
+        print(f'\nEl enfado de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
+
 def pelea_enemigo(prota, enemigo, novia):
+    turno = 0
     while prota.esta_vivo() and enemigo.esta_vivo() and novia.enfado < 100:
         stun_al_prota = False
         stun_al_enemigo = False
-        turno = 0
         print(f'\nTurno {turno} ===============================================================================\n')
-        print(f'La energía de {prota.nombre} es {prota.energia}')
-        print(f'La energía de {enemigo.nombre} es {enemigo.energia}')
-        print(f'\nLa empatía de {enemigo.nombre} es {enemigo.empatia}')
-        print('Llega a 50 para que empatice contigo, pero si llegas a -50 tu novia se enfadará más\n')                                                                                                                               
-        print(f'El enfado de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
+        informacion_batalla(prota, enemigo, novia, turno)
         print('\n_______________________________ Turno de atacar del enemigo _______________________________\n')              
         stun_al_prota = prota.defender(enemigo, stun_al_enemigo, novia)
         if novia.novia_enfadada():
@@ -188,7 +184,7 @@ rondas = 0
 motivo_del_enfado = 0
 
 # CREACIÓN DE PERSONAJES PRINCIPALES
-prota = Protagonista(nombre = nombre_prota, energia = 100, empatia = 10, dialectica = 10, nivel = 0, paciencia = 0, estado = sin_estado)
+prota = Protagonista(nombre = nombre_prota, energia = 100, empatia = 10, dialectica = 15, nivel = 0, paciencia = 0, estado = sin_estado)
 
 # CREACIÓN DE NPC ALIADOS
 padre = Aliado('Padre', 0)
@@ -211,7 +207,6 @@ lista_npc_totales = []
 # Loop Juego
 while juego_iniciado: 
     
-
     if prota.nivel == 0:
         
         print(f'''Encantado {nombre_prota}. Soy cupido, te pongo en situación: 
@@ -233,11 +228,11 @@ while juego_iniciado:
         prota.subir_nivel()
         
         # CREACIÓN DE NPC
-        novia, suegro, suegra, cuñado, cuñada = personajes_segun_dificultad(dificultad)
+        novia, suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia = personajes_segun_dificultad(dificultad)
 
-        lista_npc_aliados = [padre, madre]
+        lista_npc_aliados = [padre, madre, abuelo, abuela, hermano, hermana, amigo, amiga]
         lista_npc_enemigos = [suegro, suegra, cuñado, cuñada]
-        lista_npc_totales = lista_npc_aliados + lista_npc_enemigos
+        # lista_npc_totales = lista_npc_aliados + lista_npc_enemigos
 
         # CREACIÓN DE MOTIVO DEL ENFADO
         motivo_del_enfado = random.choice(novia.lista_motivos)
@@ -251,19 +246,22 @@ while juego_iniciado:
             novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 5, enfado = 70, nivel = 1, paciencia = 2, estado = sin_estado)
         elif dificultad == 'Realista':
             novia = Boss(nombre = nombre_novia, energia = 40, empatia = 60, dialectica = 8, enfado = 100, nivel = 2, paciencia = 3, estado = sin_estado)
-    
-    if contador_eventos == 16:
+
+        crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
+
+    if contador_eventos // 7 == 0:
+        crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
+
+    if contador_eventos in [7, 14, 21]:    
+        encuentro_boss(prota, novia, rondas, motivo_del_enfado, dificultad)
+
+    if contador_eventos == 22:
         encuentro_boss(prota, novia, rondas, motivo_del_enfado, dificultad)
         print('Has terminado el juego. Has ganado.')
         sys.exit()
-
-    if contador_eventos == 8:    
-        encuentro_boss(prota, novia, rondas, motivo_del_enfado, dificultad)
-
     else:
         print('\n')
-
-        evento_aleatorio(lista_npc_aliados, lista_npc_enemigos, dificultad, prota, novia)
+        evento_aleatorio(lista_npc_totales, prota, novia)
         contador_eventos += 1
         
 

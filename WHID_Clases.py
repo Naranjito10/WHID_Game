@@ -27,14 +27,17 @@ class Personaje:
         print(self.nombre, "se ha quedado sin energía para seguir discutiendo")
         sys.exit()
 
-    def ajustar_enfado(self, ataque, novia):
+    def ajustar_enfado_novia(self, ataque, novia):
         if novia.enfado + ataque.enfado > 100:
             novia.enfado = 100
         else:
             novia.enfado += ataque.enfado
     
     def ajustar_empatia(self, ataque):
-        self.empatia += ataque.empatia
+        if self.__class__.__name__ == 'Boss':
+            self.enfado += ataque.empatia
+        elif self.__class__.__name__ == 'Enemigo':
+            self.empatia += ataque.empatia
 
     def comprobar_empatia(self, novia):
         if self.empatia > 50:
@@ -55,13 +58,13 @@ class Personaje:
             ataque_contrincante = contrincante.eleccion_ataque()
             daño_ataque_contrincante, stun_recibido_por_estado = self.calcular_daño(contrincante, ataque_contrincante, contrincante.dialectica)
             self.energia = self.energia - daño_ataque_contrincante
-            print('\nApartado sobre el ataque del atacante _____________________________________\n')
+            print('\n----- Apartado sobre el ataque del atacante -----\n')
             print(f"{self.nombre} recibe el argumento {ataque_contrincante.nombre} con una fuerza total de {daño_ataque_contrincante} y le baja la energia a {self.energia}")
-            contrincante.ajustar_enfado(ataque_contrincante, novia)
-            if self.__class__.__name__ == 'Protagonista':
-                contrincante.ajustar_empatia(ataque_contrincante)
+            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
+            if self.__class__.__name__ != 'Protagonista':
+                self.ajustar_empatia(ataque_contrincante)
             self.comprobar_muerte_aplicar_estado(ataque_contrincante)
-            contrincante.ajustar_enfado(ataque_contrincante, novia)
+            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
             return stun_recibido_por_estado
     
     def comprobar_muerte_aplicar_estado(self, ataque):
@@ -102,7 +105,7 @@ class Personaje:
         daño = ataque.daño * dialectica 
         efecto_stun = False
         paciencia_anulada = 0
-        print('\nApartado sobre el estado del que defiende _____________________________________\n')
+        print('\n----- Apartado sobre el estado del que defiende -----\n')
         if self.estado != sin_estado:
             print(f'{self.nombre} está {self.estado.nombre}')
             paciencia_anulada = 0
@@ -164,8 +167,7 @@ class Protagonista(Personaje):
                 - 2. Empatía +5 
                 - 3. Dialectica +5
                 - 4. Paciencia +2
-                \nTu respuesta:
-              ''')
+                \nTu respuesta: ''')
 
         if característica_escogida == '1':
             self.energia += 10

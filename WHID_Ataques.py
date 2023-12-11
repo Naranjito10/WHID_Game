@@ -22,6 +22,7 @@ class Estado:
         return self.probabilidad_afectar > numero_aleatorio
     
     def bajar_contador(self):
+        print(f'El contador del estado es {self.contador}')
         if self.contador > 0:
             self.contador -= 1
             if self.contador == 0:
@@ -84,13 +85,13 @@ class AtaqueProta(Ataque):
 # PROTA - CREAR LISTA DE ATAQUES DESORDENADA
 def lista_ataques_desordenada():
     lista_ataques = [
-    AtaqueProta(nombre = '"Entiendo que estés preocupada, pero dime por favor qué está sucediendo para poder ayudarte”', daño = 0.5, empatia = 5, categoria = 'arg_razonable', nivel = 0, estado = quemado, enfado = 0),
-    AtaqueProta(nombre = '“No sé qué he hecho”', daño = 0.5, empatia = 0, categoria = 'arg_cutre', nivel = 0, estado = paralizado, enfado = 0),
-    AtaqueProta(nombre = '“Creo que es culpa tuya”', daño = 1, empatia = -5, categoria = 'arg_toxico', nivel = 0, estado = veneno, enfado = 0),
+    AtaqueProta(nombre = '"Entiendo que estés preocupada, pero dime por favor qué está sucediendo para poder ayudarte"', daño = 0.5, empatia = 5, categoria = 'arg_razonable', nivel = 0, estado = quemado, enfado = 0),
+    AtaqueProta(nombre = '"No sé qué he hecho”', daño = 0.5, empatia = 0, categoria = 'arg_cutre', nivel = 0, estado = paralizado, enfado = 0),
+    AtaqueProta(nombre = '"Creo que es culpa tuya"', daño = 1, empatia = -5, categoria = 'arg_toxico', nivel = 0, estado = veneno, enfado = 0),
     AtaqueProta(nombre = '"Apoyas su argumento amistosamente"', daño = 0.5, empatia = 10, categoria = 'acc_amistosa', nivel = 0, estado = quemado, enfado = 0),
-    AtaqueProta(nombre = '"“Resultaría más sencillo resolver este problema si me dijeras de donde viene el enfado”"', daño = 1, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado, enfado = 1),
+    AtaqueProta(nombre = '"Resultaría más sencillo resolver este problema si me dijeras de donde viene el enfado"', daño = 1, empatia = 10, categoria = 'arg_razonable', nivel = 1, estado = paralizado, enfado = 1),
     AtaqueProta(nombre = '"Creo que no he hecho nada mal"', daño = 1, empatia = 10, categoria = 'arg_cutre', nivel = 1, estado = veneno, enfado = 2),
-    AtaqueProta(nombre = '"“¿Estás segura de lo que estás diciendo?”"', daño = 1, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = quemado, enfado = 6),
+    AtaqueProta(nombre = '"¿Estás segura de lo que estás diciendo?"', daño = 1, empatia = 10, categoria = 'arg_toxico', nivel = 1, estado = quemado, enfado = 6),
     AtaqueProta(nombre = '"Escuchas activamente"', daño = 1, empatia = 10, categoria = 'acc_amistosa', nivel = 1, estado = paralizado, enfado = 0),
     AtaqueProta(nombre = '"Tienes Razón 222"', daño = 2, empatia = 10, categoria = 'arg_razonable', nivel = 2, estado = veneno, enfado = 0),
     AtaqueProta(nombre = '"No 222"', daño = 2, empatia = 10, categoria = 'arg_cutre', nivel = 2, estado = quemado, enfado = 2),
@@ -122,10 +123,15 @@ def seleccionar_nuevo_ataque(nivel):
     else:
         clase1 = next(generador_clase)
         clase2 = next(generador_clase)
-        opcion_escogida = input(f'''¿Qué habilidad escoges?:\n
-                - 1. {clase1}
-                - 2. {clase2}
-                \nEscoge tu respuesta: ''')
+        opcion_escogida = ''
+        while opcion_escogida != '1' and opcion_escogida != '2':
+            try:
+                opcion_escogida = input(f'''¿Qué habilidad escoges?:\n
+    - 1. {clase1}
+    - 2. {clase2}
+                        \nEscoge tu respuesta: ''')
+            except ValueError:
+                print('Por favor, introduce un número.')
 
         if opcion_escogida == '1':
             lista_ataques_utilizados.append(clase1)
@@ -222,84 +228,6 @@ class AtaqueEnemigo(Ataque):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Estado: {self.estado}"
 
 stun_activado = Ataque(nombre = 'stun_activado', daño = 0, empatia = 0, estado = sin_estado, enfado = 0)
-
-# OTROS
-
-# arg_razonables = [{'id': 1, 
-#                   'arg_1': 'Tienes razón', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'arg_razonables'}, 
-#                   {'id': 2, 
-#                   'arg_1': 'Lo siento', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'arg_razonables'},
-#                   {'id': 3, 
-#                   'arg_1': 'Eres la mejor', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'arg_razonables'}, 
-#                   {'id': 4, 
-#                   'arg_1': 'Dime porfa que pasó', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'arg_razonables'}]
-
-# acc_amistosa = [{'id': 1, 
-#                   'arg_1': 'Amo al cine', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'acc_amistosa'}, 
-#                   {'id': 2, 
-#                   'arg_1': 'Amo al teatro', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'acc_amistosa'},
-#                   {'id': 3, 
-#                   'arg_1': 'Compramos comida?', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'acc_amistosa'}, 
-#                   {'id': 4, 
-#                   'arg_1': 'Quieres chuches?', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'acc_amistosa'}]
-
-# ata_toxico = [{'id': 1, 
-#                   'arg_1': 'Eres tú', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'ata_toxico',
-#                   'Estado': 'Quemado',
-#                   'Probabilidad_efecto': 0.30}, 
-#                   {'id': 2, 
-#                   'arg_1': 'Soy así', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'ata_toxico',
-#                   'Estado': 'Congelado',
-#                   'Probabilidad_efecto': 0.30},
-#                   {'id': 3, 
-#                   'arg_1': 'Tu culpa', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'ata_toxico',
-#                   'Estado': 'Paralizado',
-#                   'Probabilidad_efecto': 0.30}, 
-#                   {'id': 4, 
-#                   'arg_1': 'Mi padre me hizo asi', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'ata_toxico',
-#                   'Estado': 'Congelado',
-#                   'Probabilidad_efecto': 0.30}]
-
-# arg_cutre = [{'id': 1, 
-#                   'arg_1': 'El qué?', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'arg_cutre'}, 
-#                   {'id': 2, 
-#                   'arg_1': 'Yo?', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'arg_cutre'},
-#                   {'id': 3, 
-#                   'arg_1': 'Nosé', 
-#                   'Fuerza': 5,
-#                   'Categoria': 'arg_cutre'}, 
-#                   {'id': 4, 
-#                   'arg_1': 'De qué hablas?', 
-#                   'Fuerza': 10,
-#                   'Categoria': 'arg_cutre'}]
 
 
     

@@ -24,7 +24,7 @@ class Personaje:
     def morir(self):
         self.energia = 0
         self.estado = 0
-        print(self.nombre, "se ha quedado sin energía para seguir discutiendo")
+        print(self.nombre, "se ha quedado sin energía para seguir discutiendo. GANASTE LA DISCUSIÓN.")
         sys.exit()
 
     def ajustar_enfado_novia(self, ataque, novia):
@@ -47,33 +47,13 @@ class Personaje:
             print(f"{self.nombre} ha conseguido que {novia.nombre} se sienta incomprendida y ha subido su enfado")
             novia.enfado += 10
 
-    def defender(self, contrincante, stun_contrincante, novia): 
-        if stun_contrincante:
-            daño_ataque_contrincante, stun_recibido_por_estado = self.calcular_daño(contrincante, stun_activado, 0)
-            if not self.esta_vivo: 
-                self.morir()
-            print(f"{contrincante.nombre} está paralizado y no puede atacar")
-            return stun_recibido_por_estado
-        else: 
-            ataque_contrincante = contrincante.eleccion_ataque()
-            daño_ataque_contrincante, stun_recibido_por_estado = self.calcular_daño(contrincante, ataque_contrincante, contrincante.dialectica)
-            self.energia = self.energia - daño_ataque_contrincante
-            print('\n----- Apartado sobre el ataque del atacante -----\n')
-            print(f"{self.nombre} recibe el argumento {ataque_contrincante.nombre} con una fuerza total de {daño_ataque_contrincante} y le baja la energia a {self.energia}")
-            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
-            if self.__class__.__name__ != 'Protagonista':
-                self.ajustar_empatia(ataque_contrincante)
-            self.comprobar_muerte_aplicar_estado(ataque_contrincante)
-            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
-            return stun_recibido_por_estado
-    
     def comprobar_muerte_aplicar_estado(self, ataque):
         if self.esta_vivo:
             if ataque.estado != sin_estado:
                 self.comprobar_afectar_estado(ataque)
         else:
             self.morir()
-            
+
     def comprobar_afectar_estado(self, ataque):
         estado_afecta = ataque.estado.probabilidad_afectar_estado()
 
@@ -98,18 +78,41 @@ class Personaje:
         
     def comprobar_contador_a_0(self):
         if self.estado.bajar_contador():
-            print(f"{self.nombre} ha eliminado el estado {self.estado.nombre}\n")
+            print(f"{self.nombre} ya no tiene el estado {self.estado.nombre}\n")
             self.estado = sin_estado
 
-    def calcular_daño(self, contrincante, ataque, dialectica):
-        daño = ataque.daño * dialectica 
+    # ! no funciona
+    def defender(self, contrincante, stun_contrincante, novia): 
+        if stun_contrincante:
+            daño_ataque_contrincante, stun_recibido_por_estado = self.calcular_daño(contrincante, stun_activado)
+            if not self.esta_vivo: 
+                self.morir()
+            print(f"{contrincante.nombre} está paralizado y no puede atacar")
+            novia.novia_enfadada()
+            return stun_recibido_por_estado
+        else: 
+            ataque_contrincante = contrincante.eleccion_ataque()
+            daño_ataque_contrincante, stun_recibido_por_estado = self.calcular_daño(contrincante, ataque_contrincante)
+            self.energia = self.energia - daño_ataque_contrincante
+            print('\n----- Apartado sobre el ataque del atacante -----\n')
+            print(f"{self.nombre} recibe el argumento {ataque_contrincante.nombre} con una fuerza total de {daño_ataque_contrincante} y le baja la energía a {self.energia}")
+            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
+            if self.__class__.__name__ != 'Protagonista':
+                self.ajustar_empatia(ataque_contrincante)
+            self.comprobar_muerte_aplicar_estado(ataque_contrincante)
+            contrincante.ajustar_enfado_novia(ataque_contrincante, novia)
+            novia.novia_enfadada()
+            return stun_recibido_por_estado
+
+    def calcular_daño(self, contrincante, ataque_contrincante):
+        daño = ataque_contrincante.daño * contrincante.dialectica 
         efecto_stun = False
         paciencia_anulada = 0
         print('\n----- Apartado sobre el estado del que defiende -----\n')
+        print(f'El estado de {self.nombre} es {self.estado.nombre}')
         if self.estado != sin_estado:
             print(f'{self.nombre} está {self.estado.nombre}')
-            paciencia_anulada = 0
-            if not self.estado.probabilidad_trigger_estado:
+            if self.estado.probabilidad_trigger_estado == False:
                 print(f"{self.estado.nombre} no surgió efecto")
             
             if self.estado.probabilidad_trigger_estado:
@@ -118,14 +121,17 @@ class Personaje:
 
                 elif self.estado.efecto == 'Sofocado':
                     efecto_stun = True
+                    print(f'{self.nombre} está sofocado y no podrá atacar')
                     self.comprobar_contador_a_0()
 
                 elif self.estado.efecto == 'Stun': 
                     self.comprobar_contador_a_0()
+                    print(f'{self.nombre} está aturdido y no podrá atacar')
                     efecto_stun = True
 
                 elif self.estado.efecto == 'Bajar armadura':
                     paciencia_anulada = self.paciencia
+                    print(f'{self.nombre} ha perdido toda su paciencia')
                     self.comprobar_contador_a_0()
 
                 if self.estado.daño != 0:
@@ -162,12 +168,17 @@ class Protagonista(Personaje):
         [seleccionar_nuevo_ataque(0) for _ in range(4)]
         
     def seleccionar_subida_caracteristicas(self):
-        característica_escogida = input('''\nEscoge qué característica deseas incrementar:\n 
-                - 1. Energia +10
-                - 2. Empatía +5 
-                - 3. Dialectica +5
-                - 4. Paciencia +2
+        característica_escogida = '0'
+        while característica_escogida not in ['1', '2', '3', '4']:
+            try:
+                característica_escogida = input('''\nEscoge qué característica deseas incrementar:\n 
+    - 1. Energia +10
+    - 2. Empatía +5 
+    - 3. Dialectica +5
+    - 4. Paciencia +2
                 \nTu respuesta: ''')
+            except ValueError:
+                print('Debes escoger un número entre 1 y 4')
 
         if característica_escogida == '1':
             self.energia += 10
@@ -199,13 +210,27 @@ class Protagonista(Personaje):
         seleccionar_nuevo_ataque(self.nivel)
         
     def eleccion_ataque(self):
-        print('''Acciones disponibles: 
-                - 1. Argumento razonable
-                - 2. Acción amistosa 
-                - 3. Ataque toxico 
-                - 4. Argumento cutre
-              ''')
-        ataque_elegido = input('Qué deseas realizar?: ')
+        print(f'Acciones disponibles:')
+        print(f'\t- 1. Argumento razonable:')
+        for i in AtaqueProta.arg_razonable:
+            print(f'\t\t{i.nombre} (daño total: {i.daño * self.dialectica}, empatico: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})')
+        print(f'\t- 2. Acción amistosa:')
+        for i in AtaqueProta.acc_amistosa:
+            print(f'\t\t{i.nombre} (daño total: {i.daño * self.dialectica}, empatico: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})')
+        print(f'\t- 3. Ataque toxico:')
+        for i in AtaqueProta.arg_toxico:
+            print(f'\t\t{i.nombre} (daño total: {i.daño * self.dialectica}, empatico: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})')
+        print(f'\t- 4. Argumento cutre:')
+        for i in AtaqueProta.arg_cutre:
+            print(f'\t\t{i.nombre} (daño total: {i.daño * self.dialectica}, empatico: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})')
+
+        ataque_elegido = '0'
+        while ataque_elegido not in ['1', '2', '3', '4']:
+            try: 
+                ataque_elegido = input('Qué deseas realizar?: ')
+            except ValueError:
+                print('Debes escoger un número entre 1 y 4')
+
         if ataque_elegido == '1':
             categoria_elegida = AtaqueProta.arg_razonable
         elif ataque_elegido == '2':
@@ -263,11 +288,8 @@ class Boss(Personaje):
     
     def novia_enfadada(self):
         if self.enfado >= 100: 
-            return True
-        
-    def enfado_maximo(self):
-        print('El nivel de enfado de la novia es demasiado alto. Tu novia te ha dejado. Game Over.')
-        sys.exit()  
+            print('El nivel de enfado de la novia es demasiado alto. Tu novia te ha dejado. Game Over.')
+            sys.exit()         
         
 # CLASE HIJO ENEMIGO 
 class Enemigo(Personaje):

@@ -1,5 +1,6 @@
 from WHID_Clases import *
 from WHID_Ataques import * 
+from WHID_Aliados import *
 import sys
 
 # FUNCIONES
@@ -216,11 +217,50 @@ juego_iniciado = True
 print('Bienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
 nombre_prota = input('Hola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
 nombre_novia = input('Cómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
-contador_eventos = 0
-motivo_del_enfado = 0
+
+clase_personaje = input(f'''Bien, {nombre_prota}. ¿Qué tipo de persona eres?\n
+    1. Empático: Tienes más empatía con los demás, pero menos energía y dialéctica.
+    2. Dialéctico: Tienes más dialéctica, pero menos empatía y energía.
+    3. Energético: Tienes más energía, pero menos empatía y dialéctica.
+    4. Equilibrado: Tienes las características equilibradas.\n
+    Tu respuesta: ''')
 
 # CREACIÓN DE PERSONAJES PRINCIPALES
-prota = Protagonista(nombre = nombre_prota, energia = 100, empatia = 10, dialectica = 15, nivel = 0, paciencia = 0, estado = sin_estado)
+if clase_personaje == '1':
+    prota = Protagonista(nombre = nombre_prota, 
+                         energia = 100, 
+                         empatia = 20, 
+                         dialectica = 10, 
+                         nivel = 0, 
+                         paciencia = 1, 
+                         estado = sin_estado)
+    
+elif clase_personaje == '2':
+    prota = Protagonista(nombre = nombre_prota, 
+                         energia = 100, 
+                         empatia = 10, 
+                         dialectica = 20, 
+                         nivel = 0, 
+                         paciencia = 1, 
+                         estado = sin_estado)
+    
+elif clase_personaje == '3':
+    prota = Protagonista(nombre = nombre_prota, 
+                         energia = 200, 
+                         empatia = 10, 
+                         dialectica = 10, 
+                         nivel = 0, 
+                         paciencia = 5, 
+                         estado = sin_estado)
+    
+elif clase_personaje == '4':
+    prota = Protagonista(nombre = nombre_prota, 
+                         energia = 150, 
+                         empatia = 15, 
+                         dialectica = 15, 
+                         nivel = 0, 
+                         paciencia = 2, 
+                         estado = sin_estado)
 
 # CREACIÓN DE NPC ALIADOS
 padre = Aliado('Padre', 0)
@@ -239,6 +279,7 @@ gato = Aliado('Gato', 0)
 # VARIABLES DE JUEGO
 dificultad = 0
 motivo_del_enfado = ''
+contador_eventos = 0
 lista_npc_aliados = []
 lista_npc_enemigos = []
 lista_npc_totales = []

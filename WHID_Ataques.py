@@ -9,28 +9,50 @@ class Estado:
         self.daño = daño
         self.efecto = efecto
 
+          # Guarda los valores originales al crear la instancia
+        self._probabilidad_afectar_original = probabilidad_afectar
+        self._probabilidad_trigger_original = probabilidad_trigger
+        self._contador_original = contador
+        self._daño_original = daño
+        self._efecto_original = efecto
+
     def __str__(self):
         return f"Nombre: {self.nombre}, Probabilidad de trigger: {self.probabilidad_trigger}, Contador: {self.contador}, Daño: {self.daño}, Efecto: {self.efecto}"
     
+    # Restablece las estadísticas a sus valores originales
+    def resetear_estadisticas(self):
+        self.probabilidad_afectar = self._probabilidad_afectar_original
+        self.probabilidad_trigger = self._probabilidad_trigger_original
+        self.contador = self._contador_original
+        self.daño = self._daño_original
+        self.efecto = self._efecto_original
+
+    # Si es TRUE el personaje obtiene el estado
     def probabilidad_afectar_estado(self):
         numero_aleatorio = random.random()
-        print(f'AFECTAR. Este es el número aleatorio: {numero_aleatorio}')
-        print(f'AFECTAR. Esta es la posibilidad de trigger: {self.probabilidad_afectar}')
+        # print(f'AFECTAR. Este es el número aleatorio: {numero_aleatorio}')
+        # print(f'AFECTAR. Esta es la posibilidad de afectar: {self.probabilidad_afectar}')
         return self.probabilidad_afectar > numero_aleatorio
 
+    # Si es TRUE el estado hace su efecto
     def probabilidad_trigger_estado(self):
         numero_aleatorio = random.random()
-        print(f'TRIGGER. Este es el número aleatorio: {numero_aleatorio}')
-        print(f'TRIGGER. Esta es la posibilidad de trigger: {self.probabilidad_trigger}')
+        # print(f'TRIGGER. Este es el número aleatorio: {numero_aleatorio}')
+        # print(f'TRIGGER. Esta es la posibilidad de trigger: {self.probabilidad_trigger}')
         return self.probabilidad_trigger > numero_aleatorio
     
     def subir_contador(self):
         if self.efecto == 'Reducir daño' or self.efecto == 'Stun':
             self.contador += 1
-            print(f'El contador de {self.nombre} es {self.contador}')
+            # print(f'El contador de {self.nombre} es {self.contador}')
         else:
             self.contador += 2
-            print(f'El contador de {self.nombre} es {self.contador}')
+            # print(f'El contador de {self.nombre} es {self.contador}')
+    
+    def resetear_estadísticas(self):
+        self.contador = 0
+        self.daño = 0
+        self.efecto = ''
 
 # ESTADOS Y ATAQUES
 quemado_enemigos = Estado(nombre = 'Quemado', probabilidad_afectar = 0.9, probabilidad_trigger = 0.30, contador = 1, daño = 2, efecto = 'Reducir daño')
@@ -54,12 +76,11 @@ class Ataque:
     contador_id = 1
     # lista_ataques_totales = []    
 
-    def __init__(self, nombre: str, daño: int, empatia: int, estado: str = sin_estado, enfado: int = 0):
+    def __init__(self, nombre: str, daño: int, estado: str = sin_estado, enfado: int = 0):
         self.id = Ataque.contador_id  # Asigna el id actual y luego incrementa el contador
         Ataque.contador_id += 1
         self.nombre = nombre
         self.daño = daño
-        self.empatia = empatia
         self.estado = estado
         self.enfado = enfado
         # self.lista_ataques_totales.append(Ataque)
@@ -78,9 +99,10 @@ class AtaqueProta(Ataque):
     arg_toxico = []
 
     def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = '', enfado: int = 0):
-        super().__init__(nombre, daño, empatia, estado, enfado)
-        self.nivel = nivel
+        super().__init__(nombre, daño, estado, enfado)
+        self.empatia = empatia
         self.categoria = categoria
+        self.nivel = nivel
 
     def __str__(self):
         return f'''Ataque: {self.nombre}
@@ -272,36 +294,58 @@ def lista_ataques_desordenada():
 # PROTA - SELECCIÓN HABILIDADES PARA BORRAR
 def seleccionar_habilidad_borrar():
     opcion_escogida = ''
-    opcion1 = random.choice(AtaqueProta.arg_cutre)
-    opcion2 = random.choice(AtaqueProta.arg_razonable)
-    opcion3 = random.choice(AtaqueProta.arg_toxico)
-    opcion4 = random.choice(AtaqueProta.acc_amistosa)
-    while opcion_escogida not in ['1', '2', '3', '4']:
+    lista_numeros = []
+    if len(AtaqueProta.arg_cutre) != 0:
+        opcion1 = random.choice(AtaqueProta.arg_cutre)
+        numero1 = 1
+        lista_numeros.append(numero1)
+    else: 
+        opcion1 = 'No hay habilidades en esta categoría'
+    if len(AtaqueProta.arg_razonable) != 0:
+        opcion2 = random.choice(AtaqueProta.arg_razonable)
+        numero2 = 2
+        lista_numeros.append(numero2)
+    else: 
+        opcion2 = 'No hay habilidades en esta categoría'
+    if len(AtaqueProta.arg_toxico) != 0:
+        opcion3 = random.choice(AtaqueProta.arg_toxico)
+        numero3 = 3
+        lista_numeros.append(numero3)
+    else:
+        opcion3 = 'No hay habilidades en esta categoría'
+    if len(AtaqueProta.acc_amistosa) != 0:
+        opcion4 = random.choice(AtaqueProta.acc_amistosa)
+        numero4 = 4
+        lista_numeros.append(numero4)
+    else:
+        opcion4 = 'No hay habilidades en esta categoría'
+
+    while opcion_escogida not in lista_numeros:
         try:
-            opcion_escogida = input(f'''¿Qué habilidad quieres borrar?:\n
+            opcion_escogida = int(input(f'''¿Qué habilidad quieres borrar?:\n
     - 1. {opcion1}
     - 2. {opcion2}
     - 3. {opcion3}
     - 4. {opcion4}
-    \nEscoge tu respuesta: ''')
+    \nEscoge tu respuesta: '''))
         except ValueError:
-            print('Por favor, introduce un número.')
+            print('Por favor, introduce un número válido.')
 
-    if opcion_escogida == '1':
+    if opcion_escogida == 1:
         AtaqueProta.arg_cutre.remove(opcion1)
         print(f'Muy bien, has borrado la habilidad {opcion1.nombre} en la categoría {opcion1.categoria}')
 
-    elif opcion_escogida == '2':
+    elif opcion_escogida == 2:
         AtaqueProta.arg_razonable.remove(opcion2)
         print(f'Muy bien, has borrado la habilidad {opcion2.nombre} en la categoría {opcion2.categoria}')
 
-    elif opcion_escogida == '3':
+    elif opcion_escogida == 3:
         AtaqueProta.arg_toxico.remove(opcion3)
         print(f'Muy bien, has borrado la habilidad {opcion3.nombre} en la categoría {opcion3.categoria}')
     
-    elif opcion_escogida == '4':
+    elif opcion_escogida == 4:
         AtaqueProta.acc_amistosa.remove(opcion4)
-    print(f'Muy bien, has borrado la habilidad {opcion4.nombre} en la categoría {opcion4.categoria}')
+        print(f'Muy bien, has borrado la habilidad {opcion4.nombre} en la categoría {opcion4.categoria}')
 
 # PROTA - CREAR GENERADOR DE ATAQUES POR NIVEL
 def crear_ataque_nivel(nivel): 
@@ -324,7 +368,7 @@ def seleccionar_nuevo_ataque(nivel):
         while opcion_escogida != '1' and opcion_escogida != '2':
             try:
                 opcion_escogida = input(f'''¿Qué habilidad escoges?:\n
-    - 1. {clase1}
+    - 1. {clase1}\n
     - 2. {clase2}
     \nEscoge tu respuesta: ''')
             except ValueError:
@@ -364,28 +408,28 @@ class AtaqueBoss(Ataque):
 
     lista_ataques_boss = []
 
-    def __init__(self, nombre: str, daño: int, empatia: int = 0, nivel: int = 0, estado: str = '', enfado: int = 0):
-        super().__init__(nombre, daño, empatia, estado, enfado)
+    def __init__(self, nombre: str, daño: int, nivel: int = 0, estado: str = '', enfado: int = 0):
+        super().__init__(nombre, daño, estado, enfado)
         self.nivel = nivel
         
     def __str__(self):
-        return f"Ataque: {self.nombre}, Daño: {self.daño}, Empatía: {self.empatia}, Nivel: {self.nivel}, PENE.Estado: {self.estado.nombre}"
+        return f"Ataque: {self.nombre}, Daño: {self.daño}, Nivel: {self.nivel}, PENE.Estado: {self.estado.nombre}"
     
 # BOSS - CREAR LISTA DE ATAQUES BOSS DESORDENADA
 def lista_ataques_boss_desordenada():
     lista_ataques = [
-    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, empatia = 0, nivel = 0, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, empatia = 0, nivel = 0, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, empatia = 0, nivel = 0, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, empatia = 0, nivel = 0, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Tú sabrás 11"', daño = 0.5, empatia = 0, nivel = 1, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 11"', daño = 0.5, empatia = 0, nivel = 1, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 11"', daño = 0.5, empatia = 0, nivel = 1, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 11"', daño = 0.5, empatia = 0, nivel = 1, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Tú sabrás 22"', daño = 0.5, empatia = 0, nivel = 2, estado = sofocado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 22"', daño = 0.5, empatia = 0, nivel = 2, estado = sofocado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 22"', daño = 0.5, empatia = 0, nivel = 2, estado = paralizado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 22"', daño = 0.5, empatia = 0, nivel = 2, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, nivel = 0, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, nivel = 0, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Tú sabrás 11"', daño = 0.5, nivel = 1, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Haz lo que quieras 11"', daño = 0.5, nivel = 1, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"tóxico BOSS 11"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"no me hables 11"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Tú sabrás 22"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Haz lo que quieras 22"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"tóxico BOSS 22"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"no me hables 22"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
     ]
     random.shuffle(lista_ataques) 
     return lista_ataques
@@ -420,11 +464,12 @@ class AtaqueEnemigo(Ataque):
     lista_ataques_enemigo = []
 
     def __init__(self, nombre: str, daño: int, nivel: int = 0, enfado: int = 0, estado: str = '', empatia: int = 0):
-        super().__init__(nombre, daño, empatia, estado, enfado)
+        super().__init__(nombre, daño, estado, enfado)
         self.nivel = nivel
+        self.empatia = empatia
 
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Estado: {self.estado}"
 
 
-stun_activado = Ataque(nombre = 'stun_activado', daño = 0, empatia = 0, estado = sin_estado, enfado = 0)
+stun_activado = Ataque(nombre = 'stun_activado', daño = 0, estado = sin_estado, enfado = 0)

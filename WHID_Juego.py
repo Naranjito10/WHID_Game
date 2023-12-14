@@ -1,6 +1,5 @@
 from WHID_Clases import *
-from WHID_Ataques import *
-from random import randint
+from WHID_Ataques import * 
 import sys
 
 # FUNCIONES
@@ -22,44 +21,45 @@ def personajes_segun_dificultad(dificultad):
     
     # CREACIÓN DE NPC ENEMIGOS
     # SUEGROS
-    ataque_suegro = AtaqueEnemigo(nombre = '"No vales tanto como para estar con ella"', daño = 0.5, nivel = 0, enfado = 0, estado = quemado_prota, empatia = 0)
-    suegro = Enemigo(nombre = 'Suegro', energia = 40, empatia = 0, dialectica = 5, paciencia = 1, ataque_enemigo = ataque_suegro, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_suegro = AtaqueEnemigo(nombre = '"No vales tanto como para estar con ella"', daño = 1, nivel = 0, enfado = 0, estado = quemado_prota, empatia = 0)
+    suegro = Enemigo(nombre = 'Suegro', energia = 50, empatia = 0, empatia_inicial = -30, dialectica = 5, paciencia = 1, ataque_enemigo = ataque_suegro, nivel = dificultad_enemigos, estado = sin_estado)
 
     ataque_suegra = AtaqueEnemigo(nombre = '"¿Aún no te ha dejado?"', daño = 0.5,  nivel = 0, enfado = 0, estado = quemado_prota, empatia = 0)
-    suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, dialectica = 5, paciencia = 1, ataque_enemigo = ataque_suegra, nivel = dificultad_enemigos, estado = sin_estado)
+    suegra = Enemigo(nombre = 'Suegra', energia = 40, empatia = 0, empatia_inicial = -30, dialectica = 5, paciencia = 1, ataque_enemigo = ataque_suegra, nivel = dificultad_enemigos, estado = sin_estado)
 
     # CUÑADOS
-    ataque_cuñado = AtaqueEnemigo(nombre = '"No sé de qué me hablas. Seguro que le has puesto los cuernos..."', daño = 5,  nivel = 0, enfado = 0, estado = paralizado_prota, empatia = 0)
-    cuñado = Enemigo(nombre = 'Cuñado', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_cuñado, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_cuñado = AtaqueEnemigo(nombre = '"No sé de qué me hablas. Seguro que le has puesto los cuernos..."', daño = 2.5,  nivel = 0, enfado = 0, estado = paralizado_prota, empatia = 0)
+    cuñado = Enemigo(nombre = 'Cuñado', energia = 60, empatia = 0, empatia_inicial = -5, dialectica = 4, paciencia = 0, ataque_enemigo = ataque_cuñado, nivel = dificultad_enemigos, estado = sin_estado)
 
-    ataque_cuñada = AtaqueEnemigo(nombre = '"Eres un inútil."', daño = 0.5, nivel = 0, enfado = 0, estado = paralizado_prota, empatia = 0)
-    cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_cuñada = AtaqueEnemigo(nombre = '"Eres un inútil."', daño = 1, nivel = 0, enfado = 0, estado = paralizado_prota, empatia = 0)
+    cuñada = Enemigo(nombre = 'Cuñada', energia = 40, empatia = 0, empatia_inicial = -5, dialectica = 4, paciencia = 0, ataque_enemigo = ataque_cuñada, nivel = dificultad_enemigos, estado = sin_estado)
     
     # AMIGOS NOVIA
-    ataque_amigo_novia = AtaqueEnemigo(nombre = '"Ella necesita a alguien que la quiera de verdad... Yo, por ejemplo."', daño = 0.5, nivel = 0, enfado = 0, estado = envenenado_prota, empatia = 0)
-    amigo_novia = Enemigo(nombre = 'Amigo de la novia', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_amigo_novia, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_amigo_novia = AtaqueEnemigo(nombre = '"Ella necesita a alguien que la quiera de verdad... Yo, por ejemplo."', daño = 5, nivel = 0, enfado = 0, estado = envenenado_prota, empatia = 0)
+    amigo_novia = Enemigo(nombre = 'Amigo de la novia', energia = 40, empatia = 0, empatia_inicial = -50, dialectica = 1, paciencia = 0, ataque_enemigo = ataque_amigo_novia, nivel = dificultad_enemigos, estado = sin_estado)
 
     ataque_amiga_novia = AtaqueEnemigo(nombre = '"Ella puede estar con chicos mucho mejores que tú, más vale que espabiles."', daño = 0.5, nivel = 0, enfado = 0, estado = envenenado_prota, empatia = 0)
-    amiga_novia = Enemigo(nombre = 'Amiga de la novia', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_amiga_novia, nivel = dificultad_enemigos, estado = sin_estado)
+    amiga_novia = Enemigo(nombre = 'Amiga de la novia', energia = 40, empatia = 0, empatia_inicial = -5, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_amiga_novia, nivel = dificultad_enemigos, estado = sin_estado)
 
     # ABUELOS NOVIA
     ataque_abuela_novia = AtaqueEnemigo(nombre = '"No tienes los estudios necesarios para llegar a ser alguien en la vida."', daño = 0.5, nivel = 0, enfado = 0, estado = sofocado_prota, empatia = 0)
-    abuela_novia = Enemigo(nombre = 'Abuela de la novia', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_abuela_novia, nivel = dificultad_enemigos, estado = sin_estado)
+    abuela_novia = Enemigo(nombre = 'Abuela de la novia', energia = 40, empatia = 0, empatia_inicial = 10, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_abuela_novia, nivel = dificultad_enemigos, estado = sin_estado)
     
     ataque_abuelo_novia = AtaqueEnemigo(nombre = '"Chavalín, pero si tú no has hecho ni la mili, ¿Te crees que sirves de algo a la sociedad?."', daño = 0.5, nivel = 0, enfado = 0, estado = sofocado_prota, empatia = 0)
-    abuelo_novia = Enemigo(nombre = 'Abuelo de la novia', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_abuelo_novia, nivel = dificultad_enemigos, estado = sin_estado)
+    abuelo_novia = Enemigo(nombre = 'Abuelo de la novia', energia = 40, empatia = 0, empatia_inicial = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_abuelo_novia, nivel = dificultad_enemigos, estado = sin_estado)
     
     # EX NOVIOS
-    ataque_exnovio_reciente = AtaqueEnemigo(nombre = '"Ella es mía, no te la mereces."', daño = 0.5, nivel = 0, enfado = 0, estado = quemado_prota, empatia = -30)
-    ex_novio_reciente = Enemigo(nombre = 'Exnovio reciente', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_exnovio_reciente, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_exnovio_reciente = AtaqueEnemigo(nombre = '"Ella es mía, no te la mereces."', daño = 2, nivel = 0, enfado = 1, estado = quemado_prota, empatia = 0)
+    ex_novio_reciente = Enemigo(nombre = 'Exnovio reciente', energia = 23, empatia = 0, empatia_inicial = -40, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_exnovio_reciente, nivel = dificultad_enemigos, estado = sin_estado)
     
-    ataque_exnovio_antiguo = AtaqueEnemigo(nombre = '"Yo le regalé un viaje a Japón pero tú... lo único que le regalas son males de cabeza..."', daño = 0.5, nivel = 0, enfado = 0, estado = quemado_prota, empatia = -30)
-    exnovio_antiguo = Enemigo(nombre = 'Exnovio antiguo', energia = 40, empatia = 0, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_exnovio_antiguo, nivel = dificultad_enemigos, estado = sin_estado)
+    ataque_exnovio_antiguo = AtaqueEnemigo(nombre = '"Yo le regalé un viaje a Japón pero tú... lo único que le regalas son males de cabeza..."', daño = 2, nivel = 0, enfado = 1, estado = quemado_prota, empatia = 0)
+    exnovio_antiguo = Enemigo(nombre = 'Exnovio antiguo', energia = 25, empatia = 0, empatia_inicial = -30, dialectica = 5, paciencia = 0, ataque_enemigo = ataque_exnovio_antiguo, nivel = dificultad_enemigos, estado = sin_estado)
+    
     return suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo
 
 # SELECCIÓN DE DIFICULTAD
 def seleccion_dificultad():
-    respuesta = ''
+    respuesta = 0
     while respuesta not in [1, 2, 3, 4]: 
         try:
             respuesta = int(input('''Selecciona la dificultad: 
@@ -127,23 +127,27 @@ def continuar():
 
 # SISTEMA DE COMBATE
 def informacion_batalla(prota, enemigo, novia, turno):
-    print(f'La energía de {prota.nombre} es ***{prota.energia}***. Tiene el estado "{prota.estado.nombre}" con {prota.estado.contador} turnos restantes.')
-    print(f'\nLa energía de {enemigo.nombre} es ***{enemigo.energia}***. Tiene el estado "{enemigo.estado.nombre}" con {enemigo.estado.contador} turnos restantes.')
+    print(f'La ENERGÍA de {prota.nombre} es ***{prota.energia}***.')
+    if prota.estado != sin_estado:
+        print(f'Tiene el estado "{prota.estado.nombre}" con {prota.estado.contador} turnos restantes.')
+    print(f'\nLa ENERGÍA de {enemigo.nombre} es ***{enemigo.energia}***.')
+    if enemigo.estado != sin_estado:
+        print(f'Tiene el estado "{enemigo.estado.nombre}" con {enemigo.estado.contador} turnos restantes.')
     if turno == 0 and enemigo.__class__.__name__ == 'Boss':
-        print(f'El enfado de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
-        print(f'Con tu novia la empatía afecta directamente a su enfado. Ten cuidado.')
+        print(f'El ENFADO de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
+        print(f'Con tu novia la EMPATÍA afecta directamente a su enfado. Ten cuidado.')
 
     elif turno != 0 and enemigo.__class__.__name__ == 'Boss':
-        print(f'El enfado de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
+        print(f'El ENFADO de tu novia {novia.nombre} es de ***{novia.enfado}***. Evita que llegue a 100')
     
     elif turno == 0 and enemigo.__class__.__name__ != 'Boss':
-        print(f'La empatía de {enemigo.nombre} es ***{enemigo.empatia}***')
+        print(f'La EMPATÍA de {enemigo.nombre} es ***{enemigo.empatia}***')
         print('Si llegas a 50 el enemigo empatizará contigo, pero si llegas a -50 tu novia se enfadará más')                                                                                                                               
-        print(f'\nEl enfado de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
+        print(f'\nEl ENFADO de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
 
     elif turno != 0 and enemigo.__class__.__name__ != 'Boss':
-        print(f'La empatía de {enemigo.nombre} es ***{enemigo.empatia}***')
-        print(f'\nEl enfado de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
+        print(f'La EMPATÍA de {enemigo.nombre} es ***{enemigo.empatia}***')
+        print(f'\nEl ENFADO de {novia.nombre} es {novia.enfado}, evita que llegue a 100')
 
 # PELEA 
 def pelea_enemigo(prota, enemigo, novia):
@@ -242,39 +246,35 @@ lista_npc_totales = []
 
 # Loop Juego
 while juego_iniciado: 
-    
     if prota.nivel == 0:
         
-        print(f'''Encantado {nombre_prota}. Soy cupido, te pongo en situación: 
-              
+        print(f'''\nEncantado {nombre_prota}. Soy cupido, te pongo en situación: \n
     Tu novia, {nombre_novia}, te ha dicho que la has cagado, pero no sabes el porqué. 
     Su respuesta a tu ignorancia es contundente: "Tú sabrás". 
-    Así que decides investigar para arreglarlo. 
-
+    Así que decides investigar para arreglarlo. \n
     Te encontrarás con enemigos que frenarán tu búsqueda y aliados que te darán 
-    herramientas para mitigar la furia de tu novia. 
-        
+    herramientas para mitigar la furia de tu novia. \n
     ¿Conseguirás adivinar por qué se enfadó? 
-    Y, lo más importante, 
-    ¿Conseguirás arreglarlo?
-            ''')
+    Y, lo más importante, \n
+    ¿Conseguirás arreglarlo?\n
+    Buena suerte, la vas a necesitar.\n''')
         
         dificultad = seleccion_dificultad()
 
         # CREACIÓN DE BOSS
         if dificultad == 1:
-            novia = Boss(nombre = nombre_novia, energia = 100, dialectica = 2, enfado = 20, nivel = 0, paciencia = 0, estado = sin_estado)
+            novia = Boss(nombre = nombre_novia, energia = 100, empatia = 0, dialectica = 2, enfado = 20, nivel = 0, paciencia = 0, estado = sin_estado)
         elif dificultad == 2:
-            novia = Boss(nombre = nombre_novia, energia = 125, dialectica = 3, enfado = 40, nivel = 0, paciencia = 1, estado = sin_estado)
+            novia = Boss(nombre = nombre_novia, energia = 125, empatia = 0, dialectica = 3, enfado = 40, nivel = 0, paciencia = 1, estado = sin_estado)
         elif dificultad == 3:
-            novia = Boss(nombre = nombre_novia, energia = 150, dialectica = 5, enfado = 60, nivel = 1, paciencia = 2, estado = sin_estado)
+            novia = Boss(nombre = nombre_novia, energia = 150, empatia = 0, dialectica = 5, enfado = 60, nivel = 1, paciencia = 2, estado = sin_estado)
         elif dificultad == 4:
-            novia = Boss(nombre = nombre_novia, energia = 250, dialectica = 8, enfado = 80, nivel = 2, paciencia = 3, estado = sin_estado)
+            novia = Boss(nombre = nombre_novia, energia = 250, empatia = 0, dialectica = 8, enfado = 80, nivel = 2, paciencia = 3, estado = sin_estado)
 
         # CREACIÓN DE MOTIVO DEL ENFADO
         motivo_del_enfado = random.choice(novia.lista_motivos)
 
-        prota.ganar_experiencia(100, 1)
+        prota.ganar_experiencia(0, dificultad)
         
         # CREACIÓN DE NPC
         suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo = personajes_segun_dificultad(dificultad)
@@ -284,7 +284,7 @@ while juego_iniciado:
 
         # CREACIÓN DE EVENTOS
         crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
-        print(f'Esta es la lista de npc totales: ')
+        print(f'Esta es la lista de npc totales: \n')
         for indice, npc in enumerate(lista_npc_totales):
             print(f"- {indice}. Nombre: {npc.nombre}")
 
@@ -305,7 +305,7 @@ while juego_iniciado:
         encuentro_boss(prota, novia, motivo_del_enfado, dificultad)
 
     else:
-        print(f'Has hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos.')
+        print(f'\nHas hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos.')
         evento_aleatorio(lista_npc_totales, prota, novia)
         contador_eventos += 1
         

@@ -113,6 +113,7 @@ def evento_aleatorio(lista_npc_totales, prota, novia):
     else:
         personaje_aleatorio.eleccion_personaje(prota, novia)
     lista_npc_totales.remove(personaje_aleatorio)
+    print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
     for indice, npc in enumerate(lista_npc_totales):
         print(f"- {indice}. Nombre: {npc.nombre}")
 
@@ -161,10 +162,12 @@ def pelea_enemigo(prota, enemigo, novia):
         continuar()
         print('\n_______________________________ ATACA EL PROTA _______________________________\n')              
         enemigo.defender(prota, novia)
+        novia.novia_enfadada()
         continuar()
         turno += 1
 
-    enemigo.comprobar_empatia(novia)
+    if enemigo.__class__.__name__ == 'Enemigo':
+        enemigo.comprobar_empatia(novia)
 
 # SELECCIÓN VEREDICTO
 def seleccion_motivos(novia, motivo, seleccion_dificultad):
@@ -182,11 +185,13 @@ def seleccion_motivos(novia, motivo, seleccion_dificultad):
     print('Estas son las posibles razones: ')
     print(min(dificultad, len(novia.lista_motivos)))
     motivo = random.sample(novia.lista_motivos, min(dificultad, len(novia.lista_motivos)))
-    print(motivo)
+    
     lista_posibles_motivos = motivo
-    for i in lista_posibles_motivos if i not in lista_descartados else novia.lista_motivos:
+
+    for i in lista_posibles_motivos:
         index, palabra = enumerate(i)
         print(f'{index}: {palabra}')
+
     respuesta = int(input('Selecciona el motivo: '))
     if respuesta == novia.lista_motivos.index(motivo):
         return True
@@ -196,7 +201,8 @@ def seleccion_motivos(novia, motivo, seleccion_dificultad):
     
 # ENCUENTROS CON BOSS
 def encuentro_boss(prota, novia, motivo, dificultad):
-    print('\nTe encuentras con el BOSS FINAL: Tu novia. \nTiene estas características: ')
+    print('¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!')
+    print(f'\nTe encuentras con el BOSS FINAL: TU NOVIA {novia.nombre}. \nTiene estas características: ')
     print(novia)
     print('\nEstá esperando una respuesta por tu parte:')
     pelea_enemigo(prota, novia, novia)
@@ -215,52 +221,68 @@ def encuentro_boss(prota, novia, motivo, dificultad):
 # Inicio Juego
 juego_iniciado = True
 print('Bienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
-nombre_prota = input('Hola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
-nombre_novia = input('Cómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
+nombre_prota = input('\nHola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
+nombre_novia = input('\nCómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
+clase_personaje = ''
 
-clase_personaje = input(f'''Bien, {nombre_prota}. ¿Qué tipo de persona eres?\n
+
+# CREACIÓN DE PERSONAJES PRINCIPALES
+while clase_personaje not in ['1', '2', '3', '4', '5']:
+    clase_personaje = input(f'''\nBien, {nombre_prota}. ¿Qué tipo de persona eres?\n
     1. Empático: Tienes más empatía con los demás, pero menos energía y dialéctica.
     2. Dialéctico: Tienes más dialéctica, pero menos empatía y energía.
     3. Energético: Tienes más energía, pero menos empatía y dialéctica.
     4. Equilibrado: Tienes las características equilibradas.\n
     Tu respuesta: ''')
-
-# CREACIÓN DE PERSONAJES PRINCIPALES
-if clase_personaje == '1':
-    prota = Protagonista(nombre = nombre_prota, 
-                         energia = 100, 
-                         empatia = 20, 
-                         dialectica = 10, 
-                         nivel = 0, 
-                         paciencia = 1, 
-                         estado = sin_estado)
-    
-elif clase_personaje == '2':
-    prota = Protagonista(nombre = nombre_prota, 
-                         energia = 100, 
-                         empatia = 10, 
-                         dialectica = 20, 
-                         nivel = 0, 
-                         paciencia = 1, 
-                         estado = sin_estado)
-    
-elif clase_personaje == '3':
-    prota = Protagonista(nombre = nombre_prota, 
-                         energia = 200, 
-                         empatia = 10, 
-                         dialectica = 10, 
-                         nivel = 0, 
-                         paciencia = 5, 
-                         estado = sin_estado)
-    
-elif clase_personaje == '4':
-    prota = Protagonista(nombre = nombre_prota, 
-                         energia = 150, 
-                         empatia = 15, 
-                         dialectica = 15, 
-                         nivel = 0, 
-                         paciencia = 2, 
-                         estado = sin_estado)
+    try:
+        if clase_personaje == '1':
+            prota = Protagonista(nombre = nombre_prota, 
+                                energia = 130, 
+                                empatia = 20, 
+                                dialectica = 10, 
+                                nivel = 0, 
+                                paciencia = 1, 
+                                estado = sin_estado)
+            
+        elif clase_personaje == '2':
+            prota = Protagonista(nombre = nombre_prota, 
+                                energia = 100, 
+                                empatia = 5, 
+                                dialectica = 18, 
+                                nivel = 0, 
+                                paciencia = 1, 
+                                estado = sin_estado)
+            
+        elif clase_personaje == '3':
+            prota = Protagonista(nombre = nombre_prota, 
+                                energia = 200, 
+                                empatia = 7, 
+                                dialectica = 10, 
+                                nivel = 0, 
+                                paciencia = 5, 
+                                estado = sin_estado)
+            
+        elif clase_personaje == '4':
+            prota = Protagonista(nombre = nombre_prota, 
+                                energia = 150, 
+                                empatia = 14, 
+                                dialectica = 15, 
+                                nivel = 0, 
+                                paciencia = 2, 
+                                estado = sin_estado)
+            
+        elif clase_personaje == '5':
+            print('\nHas elegido la opción secreta.')
+            prota = Protagonista(nombre = 'ANTIFEMINISMO', 
+                                energia = 200, 
+                                empatia = 20, 
+                                dialectica = 25, 
+                                nivel = 0, 
+                                paciencia = 3, 
+                                estado = sin_estado)
+    except ValueError:
+        print('\nDebes introducir un número del 1 al 4')
+        continue
 
 # CREACIÓN DE NPC ALIADOS
 padre = Aliado('Padre', 0)
@@ -305,12 +327,18 @@ while juego_iniciado:
         # CREACIÓN DE BOSS
         if dificultad == 1:
             novia = Boss(nombre = nombre_novia, energia = 100, empatia = 0, dialectica = 2, enfado = 20, nivel = 0, paciencia = 0, estado = sin_estado)
+            novia.subir_nivel()
         elif dificultad == 2:
             novia = Boss(nombre = nombre_novia, energia = 125, empatia = 0, dialectica = 3, enfado = 40, nivel = 0, paciencia = 1, estado = sin_estado)
+            novia.subir_nivel()
         elif dificultad == 3:
             novia = Boss(nombre = nombre_novia, energia = 150, empatia = 0, dialectica = 5, enfado = 60, nivel = 1, paciencia = 2, estado = sin_estado)
+            novia.subir_nivel()
+            novia.subir_nivel()
         elif dificultad == 4:
             novia = Boss(nombre = nombre_novia, energia = 250, empatia = 0, dialectica = 8, enfado = 80, nivel = 2, paciencia = 3, estado = sin_estado)
+            novia.subir_nivel()
+            novia.subir_nivel()
 
         # CREACIÓN DE MOTIVO DEL ENFADO
         motivo_del_enfado = random.choice(novia.lista_motivos)
@@ -323,13 +351,15 @@ while juego_iniciado:
         lista_npc_aliados = [padre, madre, abuelo, abuela, hermano, hermana, amigo, amiga, compañero_clase, compañera_clase, perro, gato]
         lista_npc_enemigos = [suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo]
 
+        seleccion_motivos(novia, motivo_del_enfado, dificultad)
+
         # CREACIÓN DE EVENTOS
         crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
-        print(f'Esta es la lista de npc totales: \n')
+        print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
         for indice, npc in enumerate(lista_npc_totales):
             print(f"- {indice}. Nombre: {npc.nombre}")
 
-    if contador_eventos in [7, 14, 21]:    
+    if contador_eventos in [2, 7, 14, 21]:    
         encuentro_boss(prota, novia, motivo_del_enfado, dificultad)
         print('No has conseguido adivinar el motivo del enfado. Debes seguir investigando.')
         print(f'Has hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos para adivinarlo.')
@@ -337,6 +367,7 @@ while juego_iniciado:
         for indice, npc in enumerate(lista_npc_totales):
             print(f"Índice: {indice}, Nombre: {npc.nombre}")
         crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
+        print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
         for indice, npc in enumerate(lista_npc_totales):
             print(f"Índice: {indice}, Nombre: {npc.nombre}")
         print(f'Se han añadido más personajes al juego.')

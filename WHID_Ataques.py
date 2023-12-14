@@ -418,18 +418,18 @@ class AtaqueBoss(Ataque):
 # BOSS - CREAR LISTA DE ATAQUES BOSS DESORDENADA
 def lista_ataques_boss_desordenada():
     lista_ataques = [
-    AtaqueBoss(nombre = '"Tú sabrás 00"', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 00"', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 00"', daño = 0.5, nivel = 0, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 00"', daño = 0.5, nivel = 0, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Tú sabrás 11"', daño = 0.5, nivel = 1, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 11"', daño = 0.5, nivel = 1, estado = envenenado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 11"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 11"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Tú sabrás 22"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"Haz lo que quieras 22"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"tóxico BOSS 22"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
-    AtaqueBoss(nombre = '"no me hables 22"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Esta noche duermes en el sofá"', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Sí, sí... vete con tu amiga..."', daño = 0.5, nivel = 0, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Estoy harta"', daño = 2, nivel = 0, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Sabes muy bien lo que has hecho"', daño = 1, nivel = 0, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Deja de mentir"', daño = 2, nivel = 1, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me toques"', daño = 1.5, nivel = 1, estado = envenenado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Mi amiga me ha dicho que tengo razón"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Me han contado lo que has dicho de mí"', daño = 0.5, nivel = 1, estado = quemado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Tu sabrás lo que has hecho"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 2, estado = paralizado_prota, enfado = 1),
     ]
     random.shuffle(lista_ataques) 
     return lista_ataques

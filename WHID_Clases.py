@@ -27,6 +27,7 @@ class Personaje:
             sys.exit()
         else: 
             contrincante.estado.resetear_estadisticas()
+            
 
     def subir_caracteristicas_enemigo(self, nivel):
         self.energia += 10 * nivel
@@ -49,6 +50,7 @@ class Personaje:
                 print(f'El ENFADO de {novia.nombre} ha bajado a {novia.enfado}')
             else:
                 print(f'El ENFADO de {novia.nombre} no ha cambiado ({novia.enfado})')
+            
     
     def ajustar_empatia(self, ataque, personaje):
         if self.__class__.__name__ == 'Enemigo':
@@ -131,24 +133,23 @@ class Personaje:
             print(f'{self.nombre} no tiene estado')
         return efecto_stun
             
-    # TODO 'AtaqueBoss' object has no attribute 'empatia'
     def defender(self, contrincante, novia): 
         if contrincante.daño_stun_estado() == False:
             ataque_contrincante = contrincante.eleccion_ataque()
             daño_ataque_contrincante = self.calcular_daño(contrincante, ataque_contrincante)
-            self.energia = self.energia - daño_ataque_contrincante
             if self.__class__.__name__ == 'Protagonista':
                 print(f'\n>>> {contrincante.nombre} argumenta con una FUERZA total (restando la PACIENCIA de {self.nombre}) de {daño_ataque_contrincante}.\n') 
-            else:
+            elif self.__class__.__name__ == 'Enemigo':
                 empatia_total = ataque_contrincante.empatia + contrincante.empatia
                 print(f'\n>>> {contrincante.nombre} argumenta con una FUERZA total (restando la PACIENCIA de {self.nombre}) de {daño_ataque_contrincante} y una EMPATÍA total de {empatia_total}.\n') 
                 self.ajustar_empatia(ataque_contrincante, contrincante)
-    # TODO 'AtaqueBoss' object has no attribute 'empatia'
-            if self.__class__.__name__ == 'Boss':
-                contrincante.ajustar_enfado_novia(ataque_contrincante, novia, contrincante)
-            elif self.__class__.__name__ == 'Enemigo' and contrincante.__class__.__name__ == 'Protagonista':
-                contrincante.ajustar_enfado_novia(ataque_contrincante, novia, contrincante)
+            elif self.__class__.__name__ == 'Boss':
+                print(f'\n>>> {contrincante.nombre} argumenta con una FUERZA total (restando la PACIENCIA de {self.nombre}) de {daño_ataque_contrincante}.\n')        
+            self.ajustar_enfado_novia(ataque_contrincante, novia, contrincante)
+            # APLICAR ESTADO
             self.aplicar_estado(ataque_contrincante)
+            # BAJAR VIDA
+            self.energia = self.energia - daño_ataque_contrincante
             print(f'\nA {self.nombre} le baja la ENERGÍA a {self.energia}.\n')
             if self.esta_vivo() == False: 
                 self.morir(contrincante)
@@ -249,7 +250,7 @@ class Protagonista(Personaje):
         while característica_escogida not in ['1', '2', '3', '4']:
             try:
                 característica_escogida = input('''\nEscoge qué característica deseas incrementar:\n 
-    - 1. Energía +10
+    - 1. Energía +25
     - 2. Empatía +5 
     - 3. Dialéctica +3
     - 4. Paciencia +2
@@ -258,7 +259,7 @@ class Protagonista(Personaje):
                 print('Debes escoger un número entre 1 y 4')
 
         if característica_escogida == '1':
-            self.energia += 10
+            self.energia += 25
             print(f'Has subido tu ENERGÍA a {self.energia}\n')
         elif característica_escogida == '2':
             self.empatia += 5
@@ -359,7 +360,7 @@ class Boss(Personaje):
         if self.nivel == 1:
             print(f'\nAhora el Boss es nivel {self.nivel}')
         else: 
-            print(f'\nAcabas el Boss es nivel {self.nivel}')
+            print(f'\nAhora el Boss es nivel {self.nivel}')
 
         seleccionar_nuevo_ataque_boss(self.nivel)
     

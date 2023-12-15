@@ -74,6 +74,7 @@ def seleccion_dificultad():
         except ValueError:
             print('Debes introducir un número del 1 al 4')
             continue
+
     return respuesta
 
 # CREADOR EVENTOS
@@ -168,40 +169,10 @@ def pelea_enemigo(prota, enemigo, novia):
 
     if enemigo.__class__.__name__ == 'Enemigo':
         enemigo.comprobar_empatia(novia)
-
-# SELECCIÓN VEREDICTO
-def seleccion_motivos(novia, motivo, seleccion_dificultad):
-    lista_descartados = []
-    if seleccion_dificultad == 1:
-        dificultad = 2
-    elif seleccion_dificultad == 2:
-        dificultad = 4
-    elif seleccion_dificultad == 3:
-        dificultad = 6  
-    elif seleccion_dificultad == 4:
-        dificultad = 8
-
-    print('¿Cuál crees que es la razón por la cual tu novia está enfadada?')
-    print('Estas son las posibles razones: ')
-    print(min(dificultad, len(novia.lista_motivos)))
-    motivo = random.sample(novia.lista_motivos, min(dificultad, len(novia.lista_motivos)))
-    
-    lista_posibles_motivos = motivo
-
-    for i in lista_posibles_motivos:
-        index, palabra = enumerate(i)
-        print(f'{index}: {palabra}')
-
-    respuesta = int(input('Selecciona el motivo: '))
-    if respuesta == novia.lista_motivos.index(motivo):
-        return True
-    else:
-        lista_descartados.append(novia.lista_motivos.index(motivo))
-        return False       
     
 # ENCUENTROS CON BOSS
-def encuentro_boss(prota, novia, motivo, dificultad):
-    print('¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!')
+def encuentro_boss(prota, novia, dificultad, lista_posibles_motivos):
+    print('\n¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!\n')
     print(f'\nTe encuentras con el BOSS FINAL: TU NOVIA {novia.nombre}. \nTiene estas características: ')
     print(novia)
     print('\nEstá esperando una respuesta por tu parte:')
@@ -210,7 +181,7 @@ def encuentro_boss(prota, novia, motivo, dificultad):
     novia.subir_nivel()
     experiencia_ganada = 100 * novia.nivel
     prota.ganar_experiencia(experiencia_ganada, dificultad)
-    if seleccion_motivos(novia, motivo, dificultad):
+    if novia.seleccion_motivos(lista_posibles_motivos):
         print('Has conseguido adivinar el motivo del enfado. Has ganado.')
         print('Tu novia ahora sigue enfadada pero almenos sabes el porqué. Has... ¿ganado?')
         sys.exit()
@@ -300,7 +271,6 @@ gato = Aliado('Gato', 0)
 
 # VARIABLES DE JUEGO
 dificultad = 0
-motivo_del_enfado = ''
 contador_eventos = 0
 lista_npc_aliados = []
 lista_npc_enemigos = []
@@ -341,8 +311,9 @@ while juego_iniciado:
             novia.subir_nivel()
 
         # CREACIÓN DE MOTIVO DEL ENFADO
-        motivo_del_enfado = random.choice(novia.lista_motivos)
+        lista_posibles_motivos = novia.seleccionar_motivo_y_elementos(dificultad)
 
+        # PROTA NIVEL 1
         prota.ganar_experiencia(0, dificultad)
         
         # CREACIÓN DE NPC
@@ -351,7 +322,6 @@ while juego_iniciado:
         lista_npc_aliados = [padre, madre, abuelo, abuela, hermano, hermana, amigo, amiga, compañero_clase, compañera_clase, perro, gato]
         lista_npc_enemigos = [suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo]
 
-        seleccion_motivos(novia, motivo_del_enfado, dificultad)
 
         # CREACIÓN DE EVENTOS
         crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
@@ -359,8 +329,8 @@ while juego_iniciado:
         for indice, npc in enumerate(lista_npc_totales):
             print(f"- {indice}. Nombre: {npc.nombre}")
 
-    if contador_eventos in [2, 7, 14, 21]:    
-        encuentro_boss(prota, novia, motivo_del_enfado, dificultad)
+    if contador_eventos in [7, 14, 21]:    
+        encuentro_boss(prota, novia, dificultad, lista_posibles_motivos)
         print('No has conseguido adivinar el motivo del enfado. Debes seguir investigando.')
         print(f'Has hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos para adivinarlo.')
         print(f'Esta es la lista de npc totales tras el boss: ')
@@ -374,7 +344,7 @@ while juego_iniciado:
         contador_eventos += 1
 
     if contador_eventos == 28:
-        encuentro_boss(prota, novia, motivo_del_enfado, dificultad)
+        encuentro_boss(prota, novia, dificultad, lista_posibles_motivos)
 
     else:
         print(f'\nHas hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos.')

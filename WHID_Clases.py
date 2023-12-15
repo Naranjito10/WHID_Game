@@ -28,7 +28,6 @@ class Personaje:
         else: 
             contrincante.estado.resetear_estadisticas()
             
-
     def subir_caracteristicas_enemigo(self, nivel):
         self.energia += 10 * nivel
         self.dialectica += 1 * nivel
@@ -332,19 +331,22 @@ class Boss(Personaje):
     lista_ataques_boss = []
 
     lista_motivos = [
-        'Le diste like a una amiga en instagram.', 
-        'Te vio hablando con una amiga en la calle.', 
-        'No le escribiste mientras estabas de viaje.', 
-        'Ha visto que sigues hablando con tu ex de forma cariñosa.', 
-        'Te vio online en whatsapp y que no le contestaste.',
-        'Te acabaste la nutella que quedaba.',
-        'Te dejaste la luz del baño encendida.',
-        'Te dejaste la tapa del váter subida.',
-        '¿Has utilizado mi champú ultra caro?',
-        '¿Te has visto más capítulos de nuestra serie sin mí?',
-        '¿Por qué te has gastado 100€ euros en un videojuego?',
-        'Ayer en vez de venir a dormir conmigo te quedaste hasta las tantas jugando al lol con tus amigos.'
-    ]
+            'Le diste like a una amiga en instagram.', 
+            'Te vio hablando con una amiga en la calle.', 
+            'No le escribiste mientras estabas de viaje.', 
+            'Ha visto que sigues hablando con tu ex de forma cariñosa.', 
+            'Te vio online en whatsapp y que no le contestaste.',
+            'Te acabaste la nutella que quedaba.',
+            'Te dejaste la luz del baño encendida.',
+            'Te dejaste la tapa del váter subida.',
+            '¿Has utilizado mi champú ultra caro?',
+            '¿Te has visto más capítulos de nuestra serie sin mí?',
+            '¿Por qué te has gastado 100€ euros en un videojuego?',
+            'Ayer en vez de venir a dormir conmigo te quedaste hasta las tantas jugando al lol con tus amigos.'
+        ]
+    
+    motivo_real = ''
+    lista_descartados = []
 
     def __init__(self, nombre: str, energia: int, empatia: int, dialectica: int, enfado: int, paciencia: int, nivel: int, estado = sin_estado):
         super().__init__(nombre, energia, empatia, dialectica, paciencia, estado)
@@ -354,6 +356,56 @@ class Boss(Personaje):
 
     def __str__(self):
         return f'Nombre: {self.nombre}, Energía: {self.energia}, Dialéctica: {self.dialectica}, Enfado: {self.enfado}, Paciencia: {self.paciencia}'
+    
+    def seleccionar_motivo_y_elementos(self, dificultad):
+        # Seleccionar un motivo aleatorio
+        Boss.motivo_real = random.choice(Boss.lista_motivos)
+        print(f'\nEl motivo seleccionado es: {Boss.motivo_real}')
+
+        if dificultad == 1:
+            seleccion_dificultad = 1
+        elif dificultad == 2:
+            seleccion_dificultad = 3
+        elif dificultad == 3:
+            seleccion_dificultad = 5 
+        elif dificultad == 4:
+            seleccion_dificultad = 7
+
+        # Seleccionar x elementos aleatorios de la lista_motivos, excluyendo el motivo seleccionado
+        elementos_seleccionados = random.sample([motivo for motivo in Boss.lista_motivos if motivo != Boss.motivo_real], seleccion_dificultad)
+
+        # Agregar el motivo seleccionado a la lista final
+        lista_final = [Boss.motivo_real] + elementos_seleccionados
+
+        return lista_final
+    
+    # SELECCIÓN VEREDICTO
+    def seleccion_motivos(self, lista_posibles_motivos):
+        print('\n¿Cuál crees que es la razón por la cual tu novia está enfadada?')
+        print('\nEstas son las posibles razones: \n')
+        print(lista_posibles_motivos)
+        random.shuffle(lista_posibles_motivos)
+        print('\nLista de posibles motivos tras mezclar: \n')
+        print(lista_posibles_motivos)
+
+        for index, motivo in enumerate(lista_posibles_motivos, start=1):
+            if motivo not in Boss.lista_descartados:
+                print(f'{index}: {motivo}')
+
+        respuesta = int(input('\nSelecciona el motivo:'))
+        print(f'Has seleccionado: {lista_posibles_motivos[respuesta - 1]}')
+        print(f'El motivo correcto es: {Boss.motivo_real}')
+
+        if Boss.motivo_real == lista_posibles_motivos[respuesta - 1]:
+            print('¡Has acertado jiji!')
+            return True
+        else:
+            print('\nLista de posibles motivos antes de borrar: \n')
+            print(lista_posibles_motivos)
+            Boss.lista_descartados.append(lista_posibles_motivos[respuesta - 1])
+            print('\nBORRAMOS UN MOTIVO. Lista de posibles motivos: \n')
+            print(lista_posibles_motivos)
+            return False       
 
     def subir_nivel(self):
         self.nivel += 1

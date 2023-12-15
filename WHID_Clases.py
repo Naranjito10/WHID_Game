@@ -37,11 +37,13 @@ class Personaje:
     def ajustar_enfado_novia(self, ataque, novia, personaje):
         if not novia.novia_enfadada():
             if self.__class__.__name__ == 'Boss':
-                enfado_total = ataque.empatia + personaje.empatia + (ataque.enfado * 3)
+                enfado_total = (ataque.enfado * 3) - ataque.empatia - personaje.empatia
                 self.enfado += enfado_total
+                self.enfado = max(0, self.enfado)
             else:
                 enfado_total = ataque.enfado
                 novia.enfado += enfado_total
+                novia.enfado = max(0, novia.enfado)
 
             if enfado_total > 0:
                 print(f'El ENFADO de {novia.nombre} ha subido a {novia.enfado}')
@@ -65,6 +67,7 @@ class Personaje:
     def comprobar_empatia(self, novia):
         if self.empatia_inicial > 50:
             novia.enfado -= 10
+            novia.enfado = max(0, novia.enfado)
             print(f'\n{self.nombre} le ha hablado a {novia.nombre} bien sobre ti y ha bajado su ENFADO a {novia.enfado}')
         elif self.empatia_inicial < -50:
             novia.enfado += 10
@@ -425,7 +428,9 @@ class Boss(Personaje):
     def novia_enfadada(self):
         if self.enfado >= 100: 
             print('El nivel de enfado de la novia es demasiado alto. Tu novia te ha dejado. Game Over.')
-            sys.exit()         
+            sys.exit()      
+        elif self.enfado < 0:
+            self.enfado = 0 
         
 # CLASE HIJO ENEMIGO 
 class Enemigo(Personaje):

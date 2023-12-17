@@ -98,6 +98,8 @@ class AtaqueProta(Ataque):
     arg_cutre = []
     arg_toxico = []
 
+    ataques_prota_listas = [arg_razonable, acc_amistosa, arg_cutre, arg_toxico]
+
     def __init__(self, nombre: str, daño: int, empatia: int, categoria: str, nivel: int = 0, estado: str = '', enfado: int = 0):
         super().__init__(nombre, daño, estado, enfado)
         self.empatia = empatia

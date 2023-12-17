@@ -9,10 +9,14 @@ class Personaje:
     def __init__(self, nombre: str, energia: int, empatia: int, dialectica: int, paciencia: int, estado = sin_estado):
         self.nombre = nombre
         self.energia = energia
+        self.energia_maxima = energia
+        self.energia_actual = f'{self.energia}/{self.energia_maxima}'
         self.empatia = empatia
         self.dialectica = dialectica
         self.paciencia = paciencia
         self.estado = estado
+
+    # FUNCIONES VIDA
 
     def esta_vivo(self):
         return self.energia > 0
@@ -21,15 +25,32 @@ class Personaje:
         self.energia = 0
         if self.estado != sin_estado:
             self.estado.resetear_estadisticas()
+
         print(self.nombre, 'se ha quedado sin ENERGÍA para seguir discutiendo.')
         if self.__class__.__name__ == 'Protagonista':
             print('No eres capaz de seguir luchando por mantener a tu novia y huyes. Game Over')
             sys.exit()
         else: 
             contrincante.estado.resetear_estadisticas()
+            contrincante.estado = sin_estado
             
+    def bajar_vida(self, daño):
+        self.energia = self.energia - daño
+
+    def curar_vida(self, cura):
+        self.energia = self.energia + cura
+        if self.energia > self.energia_maxima:
+            self.energia = self.energia_maxima
+
+    def cura_maxima(self):
+        self.energia = self.energia_maxima
+
+    def subir_vida_maxima(self, vida):
+        self.energia_maxima = self.energia_maxima + vida
+
     def subir_caracteristicas_enemigo(self, nivel):
-        self.energia += 10 * nivel
+        self.energia_maxima += 10 * nivel
+        self.cura_maxima()
         self.dialectica += 1 * nivel
         self.paciencia += 1 * nivel
         
@@ -51,8 +72,7 @@ class Personaje:
                 print(f'El ENFADO de {novia.nombre} ha bajado a {novia.enfado}')
             else:
                 print(f'El ENFADO de {novia.nombre} no ha cambiado ({novia.enfado})')
-            
-    
+             
     def ajustar_empatia(self, ataque, personaje):
         if self.__class__.__name__ == 'Enemigo':
             empatia_total = ataque.empatia + personaje.empatia
@@ -119,10 +139,10 @@ class Personaje:
             if self.estado.daño != 0:
                 if self.estado.efecto == 'Veneno':
                     daño_efecto = self.estado.daño * self.estado.contador
-                    self.energia -= daño_efecto
+                    self.bajar_vida(daño_efecto)
                 else: 
                     daño_efecto = self.estado.daño
-                    self.energia -= daño_efecto
+                    self.bajar_vida(daño_efecto)
                 print(f'{self.nombre} ha recibido {daño_efecto} de daño por el estado {self.estado.nombre}. Ahora su ENERGÍA es {self.energia}')
                 self.bajar_contador_estado()
             
@@ -137,7 +157,7 @@ class Personaje:
             
     def defender(self, contrincante, novia): 
         if contrincante.daño_stun_estado() == False:
-            ataque_contrincante = contrincante.eleccion_ataque()
+            ataque_contrincante = contrincante.eleccion_ataque(self)
             daño_ataque_contrincante = self.calcular_daño(contrincante, ataque_contrincante)
             if self.__class__.__name__ == 'Protagonista':
                 print(f'\n>>> {contrincante.nombre} argumenta con una FUERZA total (restando la PACIENCIA de {self.nombre}) de {daño_ataque_contrincante}.\n') 
@@ -151,8 +171,8 @@ class Personaje:
             # APLICAR ESTADO
             self.aplicar_estado(ataque_contrincante)
             # BAJAR VIDA
-            self.energia = self.energia - daño_ataque_contrincante
-            print(f'\nA {self.nombre} le baja la ENERGÍA a {self.energia}.\n')
+            self.bajar_vida(daño_ataque_contrincante)
+            print(f'\nA {self.nombre} le baja la ENERGÍA a {self.energia_actual}.\n')
             if self.esta_vivo() == False: 
                 self.morir(contrincante)
 
@@ -197,24 +217,14 @@ class Protagonista(Personaje):
         [seleccionar_nuevo_ataque(0) for _ in range(4)]
     
     def __str__(self):
-        return f'Nombre: {self.nombre}, Nivel: {self.nivel}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}, Paciencia: {self.paciencia}'
+        return f'Nombre: {self.nombre}, Nivel: {self.nivel}, Energía: {self.energia_actual}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}, Paciencia: {self.paciencia}'
     
     def ganar_experiencia(self, cantidad, dificultad):
         self.experiencia += cantidad
         experiencia_requerida = self.calcular_experiencia_siguiente_nivel(dificultad)
         sobrante_experiencia = experiencia_requerida - self.experiencia
         if self.nivel == 0:
-            print('''\nConceptos básicos:\n
-    - La "ENERGÍA" es la capacidad de aguante. Te permite aguantar más argumentos.
-    - La "DIALÉCTICA" es la fuerza de tus argumentos. Cuanto más alta sea, más fácil será bajar la ENERGÍA de tus contrincantes.
-    - La "EMPATÍA" es la capacidad de ponerte en el lugar de la otra persona. Una persona empática siempre cae mejor.
-    - La "PACIENCIA" es la capacidad de reducir el peso de un argumento. Determina cuanto te afectarán los argumentos.
-    - El "ENFADO" de tu novia no puede llegar a 100, sino te dejará y tus suegros montarán una fiesta.
-    - Llamaremos a los puntos de experiencia "Puntos de Amor" o "PA"\n''')
-            sobrante_experiencia = 0
-            self.subir_nivel(sobrante_experiencia)
-            print(f'\nTe faltan {experiencia_requerida} PA para subir al siguiente nivel.\n')
-            
+            print(f'\nTe faltan {experiencia_requerida} PA para subir al siguiente nivel.\n') 
         else:
             print(f'¡Has conseguido {cantidad} PA!')
             print(f'\nAhora tienes {self.experiencia} PA.')
@@ -223,6 +233,7 @@ class Protagonista(Personaje):
             else:
                 print('Tienes suficientes PA para subir de nivel.\n')
                 while self.experiencia >= experiencia_requerida:
+                    sobrante_experiencia = abs(sobrante_experiencia)
                     self.subir_nivel(sobrante_experiencia)
         
     def subir_nivel(self, sobrante_experiencia):
@@ -241,7 +252,7 @@ class Protagonista(Personaje):
             print(f'\nAhora tus características son: ')
             print(self)
             print(f'\nEscoge entre estas dos habilidades para añadir a tu kit: ')
-
+        
         seleccionar_nuevo_ataque(self.nivel)
 
     def calcular_experiencia_siguiente_nivel(self, dificultad):
@@ -261,40 +272,53 @@ class Protagonista(Personaje):
                 print('Debes escoger un número entre 1 y 4')
 
         if característica_escogida == '1':
-            self.energia += 25
-            print(f'Has subido tu ENERGÍA a {self.energia}\n')
+            self.energia_maxima += 25
+            print(f'Has subido tu ENERGÍA MÁXIMA a {self.energia_maxima}\n')
         elif característica_escogida == '2':
             self.empatia += 5
             print(f'Has subido tu EMPATÍA a {self.empatia}\n')
         elif característica_escogida == '3':
             self.dialectica += 3  
-            print(f'Has subido tu dialéctica a {self.dialectica}\n')
+            print(f'Has subido tu DIALÉCTICA a {self.dialectica}\n')
         elif característica_escogida == '4':
             self.paciencia += 2
             print(f'Has subido tu PACIENCIA a {self.paciencia}\n')
-      
-    def eleccion_ataque(self):
+
+        self.cura_maxima()
+    
+    def eleccion_ataque(self, enemigo):
         print(f'\n----- ATAQUE DE {self.nombre} -----\n')
-        print(f'Acciones disponibles:')
+        print(f'Acciones disponibles:\n')
         print(f'\t- 1. Argumento razonable:')
-        for i in AtaqueProta.arg_razonable:
-            print(f'\t\t{i.nombre}')
-            print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
+        if enemigo.self.__class__.__name__ == 'Enemigo':
+            for u in AtaqueProta.ataques_prota_listas:
+                for i in u:
+                    print(f'\t\t{i.nombre}')
+                    print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia + self.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
         
-        print(f'\t- 2. Acción amistosa:')
-        for i in AtaqueProta.acc_amistosa:
-            print(f'\t\t{i.nombre}')
-            print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
+        elif enemigo.self.__class__.__name__ == 'Boss':
+            for i in AtaqueProta.arg_razonable:
+                print(f'\t\t{i.nombre}')
+                print(f'\t\t(Daño total: {i.daño * self.dialectica}, enfado a la novia: {i.enfado - i.empatia - self.empatia}, estado: {i.estado.nombre})\n')
+
+        # for i in AtaqueProta.arg_razonable:
+        #     print(f'\t\t{i.nombre}')
+        #     print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia + self.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
+        
+        # print(f'\t- 2. Acción amistosa:')
+        # for i in AtaqueProta.acc_amistosa:
+        #     print(f'\t\t{i.nombre}')
+        #     print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia + self.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
             
-        print(f'\t- 3. Ataque tóxico:')
-        for i in AtaqueProta.arg_toxico:
-            print(f'\t\t{i.nombre}')
-            print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
+        # print(f'\t- 3. Ataque tóxico:')
+        # for i in AtaqueProta.arg_toxico:
+        #     print(f'\t\t{i.nombre}')
+        #     print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia + self.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
             
-        print(f'\t- 4. Argumento cutre:')
-        for i in AtaqueProta.arg_cutre:
-            print(f'\t\t{i.nombre}')
-            print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
+        # print(f'\t- 4. Argumento cutre:')
+        # for i in AtaqueProta.arg_cutre:
+        #     print(f'\t\t{i.nombre}')
+        #     print(f'\t\t(Daño total: {i.daño * self.dialectica}, empatía: {i.empatia + self.empatia}, enfado a la novia: {i.enfado}, estado: {i.estado.nombre})\n')
            
         ataque_elegido = '0'
         while ataque_elegido not in ['1', '2', '3', '4']:
@@ -358,12 +382,12 @@ class Boss(Personaje):
         [seleccionar_nuevo_ataque_boss(self.nivel) for _ in range(4)]
 
     def __str__(self):
-        return f'Nombre: {self.nombre}, Energía: {self.energia}, Dialéctica: {self.dialectica}, Enfado: {self.enfado}, Paciencia: {self.paciencia}'
+        return f'Nombre: {self.nombre}, Energía: {self.energia_actual}, Dialéctica: {self.dialectica}, Enfado: {self.enfado}, Paciencia: {self.paciencia}'
     
     def seleccionar_motivo_y_elementos(self, dificultad):
         # Seleccionar un motivo aleatorio
         Boss.motivo_real = random.choice(Boss.lista_motivos)
-        print(f'\nEl motivo seleccionado es: {Boss.motivo_real}')
+        # print(f'\nEl motivo seleccionado es: {Boss.motivo_real}')
 
         if dificultad == 1:
             seleccion_dificultad = 1
@@ -416,13 +440,13 @@ class Boss(Personaje):
             print(f'\nAhora el Boss es nivel {self.nivel}')
         else: 
             print(f'\nAhora el Boss es nivel {self.nivel}')
-
+        self.subir_caracteristicas_enemigo(self.nivel)
         seleccionar_nuevo_ataque_boss(self.nivel)
     
-    def eleccion_ataque(self):
+    def eleccion_ataque(self, enemigo):
         ataque_random = random.choice(AtaqueBoss.lista_ataques_boss)
         print('- - - Ataque Boss - - -')
-        print(f'\n>>> {self.nombre} ataca con {ataque_random.nombre} con una fuerza de {ataque_random.daño * self.dialectica} y posibilidad de afectar con el estado {ataque_random.estado.nombre}')
+        print(f'\n>>> {self.nombre} ataca a {enemigo.nombre} con {ataque_random.nombre} con una fuerza de {ataque_random.daño * self.dialectica} y posibilidad de afectar con el estado {ataque_random.estado.nombre}')
         return ataque_random
     
     def novia_enfadada(self):
@@ -445,14 +469,14 @@ class Enemigo(Personaje):
         self.establecer_caracteristicas_nivel(self.nivel)
 
     def __str__(self):
-        return f'Nombre: {self.nombre}, Energía: {self.energia}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}, Ataque: {self.ataque_enemigo}, Paciencia: {self.paciencia}'
+        return f'Nombre: {self.nombre}, Energía: {self.energia_actual}, Empatía: {self.empatia}, Dialéctica: {self.dialectica}, Ataque: {self.ataque_enemigo.nombre}, Paciencia: {self.paciencia}'
     
     def establecer_caracteristicas_nivel(self, nivel):
         self.subir_caracteristicas_enemigo(nivel)
         self.empatia_inicial = self.empatia_inicial - (3 * nivel)
 
-    def eleccion_ataque(self):
-        print(f'\n>>> {self.nombre} ataca con {self.ataque_enemigo.nombre} con una fuerza de {self.ataque_enemigo.daño * self.dialectica} y posibilidad de afectar con el estado {self.ataque_enemigo.estado.nombre}')
+    def eleccion_ataque(self, enemigo):
+        print(f'\n>>> {self.nombre} ataca a {enemigo.nombre} con {self.ataque_enemigo.nombre} con una fuerza de {self.ataque_enemigo.daño * self.dialectica} y posibilidad de afectar con el estado {self.ataque_enemigo.estado.nombre}')
         return self.ataque_enemigo
 
 

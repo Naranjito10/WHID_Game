@@ -1,9 +1,21 @@
 from WHID_Clases import *
 from WHID_Ataques import * 
 from WHID_Aliados import *
+import os
 import sys
 
 # FUNCIONES
+
+# CONTINUAR
+def continuar():
+    continuar = '0'
+    while continuar != '':
+        try:
+            continuar = input('\n- - - ||| @ @ @ PARA CONTINUAR PULSA ENTER @ @ @ ||| - - -:  ')
+        except ValueError:
+            print('Debes pulsar "ENTER')
+            continue
+    os.system('cls')
 
 # SELECCIÓN DE DIFICULTAD
 def personajes_segun_dificultad(dificultad):
@@ -114,26 +126,19 @@ def evento_aleatorio(lista_npc_totales, prota, novia):
     else:
         personaje_aleatorio.eleccion_personaje(prota, novia)
     lista_npc_totales.remove(personaje_aleatorio)
-    print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
-    for indice, npc in enumerate(lista_npc_totales):
-        print(f"- {indice}. Nombre: {npc.nombre}")
-
-# CONTINUAR
-def continuar():
-    continuar = '0'
-    while continuar != '':
-        try:
-            continuar = input('\n- - - ||| @ @ @ PARA CONTINUAR PULSA ENTER @ @ @ ||| - - -:  ')
-        except ValueError:
-            print('Debes pulas "ENTER')
-            continue
+    if len(lista_npc_totales) != 0:
+        print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
+        for indice, npc in enumerate(lista_npc_totales):
+            print(f"{indice}- Nombre: {npc.nombre}")
+    else: 
+        print('No quedan más personajes con los que interactuar.')
 
 # SISTEMA DE COMBATE
 def informacion_batalla(prota, enemigo, novia, turno):
-    print(f'La ENERGÍA de {prota.nombre} es ***{prota.energia}***.')
+    print(f'La ENERGÍA de {prota.nombre} es ***{prota.energia_actual}***.\n')
     if prota.estado != sin_estado:
         print(f'Tiene el estado "{prota.estado.nombre}" con {prota.estado.contador} turnos restantes.')
-    print(f'\nLa ENERGÍA de {enemigo.nombre} es ***{enemigo.energia}***.')
+    print(f'\nLa ENERGÍA de {enemigo.nombre} es ***{enemigo.energia_actual}***.')
     if enemigo.estado != sin_estado:
         print(f'Tiene el estado "{enemigo.estado.nombre}" con {enemigo.estado.contador} turnos restantes.')
     if turno == 0 and enemigo.__class__.__name__ == 'Boss':
@@ -175,7 +180,7 @@ def encuentro_boss(prota, novia, dificultad, lista_posibles_motivos):
     print('\n¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!, ¡¡¡¡¡¡¡ALERTA!!!!!!!!\n')
     print(f'\nTe encuentras con el BOSS FINAL: TU NOVIA {novia.nombre}. \nTiene estas características: ')
     print(novia)
-    print('\nEstá esperando una respuesta por tu parte:')
+    print('\nEstá esperando una respuesta por tu parte: ')
     pelea_enemigo(prota, novia, novia)
     print('Muy bien, la has calmado.')
     novia.subir_nivel()
@@ -191,11 +196,22 @@ def encuentro_boss(prota, novia, dificultad, lista_posibles_motivos):
 
 # Inicio Juego
 juego_iniciado = True
-print('Bienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
+print('\nBienvenido al juego de discusiones más realista del mundo: WHAT HAVE I DONE?\n')
 nombre_prota = input('\nHola, víctima. ¿Cuál es tu nombre para referirme a ti?: ')
 nombre_novia = input('\nCómo se llama tu novia? (No te preocupes, no se lo diré a nadie si es inventada): ')
 clase_personaje = ''
+continuar()
 
+print(f'''\nEncantado {nombre_prota}. Soy cupido, te pongo en situación: \n
+Tu novia, {nombre_novia}, te ha dicho que la has cagado, pero no sabes el porqué. 
+Su respuesta a tu ignorancia es contundente: "Tú sabrás". 
+Así que decides investigar para arreglarlo. \n
+Te encontrarás con enemigos que frenarán tu búsqueda y aliados que te darán 
+herramientas para mitigar la furia de tu novia. \n
+¿Conseguirás adivinar por qué se enfadó? 
+Y, lo más importante, \n
+¿Conseguirás arreglarlo?\n
+Buena suerte, la vas a necesitar.\n''')
 
 # CREACIÓN DE PERSONAJES PRINCIPALES
 while clase_personaje not in ['1', '2', '3', '4', '5']:
@@ -275,59 +291,55 @@ contador_eventos = 0
 lista_npc_aliados = []
 lista_npc_enemigos = []
 lista_npc_totales = []
+
+
+
+
+# SELECCIÓN DE DIFICULTAD
+dificultad = seleccion_dificultad()
+continuar()
+
+# CREACIÓN DE BOSS
+if dificultad == 1:
+    novia = Boss(nombre = nombre_novia, energia = 100, empatia = 0, dialectica = 2, enfado = 20, nivel = 0, paciencia = 0, estado = sin_estado)
+elif dificultad == 2:
+    novia = Boss(nombre = nombre_novia, energia = 125, empatia = 0, dialectica = 3, enfado = 40, nivel = 0, paciencia = 1, estado = sin_estado)
+elif dificultad == 3:
+    novia = Boss(nombre = nombre_novia, energia = 150, empatia = 0, dialectica = 5, enfado = 60, nivel = 1, paciencia = 2, estado = sin_estado)
+elif dificultad == 4:
+    novia = Boss(nombre = nombre_novia, energia = 250, empatia = 0, dialectica = 8, enfado = 80, nivel = 2, paciencia = 3, estado = sin_estado)
+
+# CREACIÓN DE MOTIVO DEL ENFADO
+lista_posibles_motivos = novia.seleccionar_motivo_y_elementos(dificultad)
+
+# PROTA NIVEL 1
+print('''\nConceptos básicos:\n
+    - La "ENERGÍA" es la capacidad de aguante. Te permite aguantar más argumentos.
+    - La "DIALÉCTICA" es la fuerza de tus argumentos. Cuanto más alta sea, más fácil será bajar la ENERGÍA de tus contrincantes.
+    - La "EMPATÍA" es la capacidad de ponerte en el lugar de la otra persona. Una persona empática siempre cae mejor.
+    - La "PACIENCIA" es la capacidad de reducir el peso de un argumento. Determina cuanto te afectarán los argumentos.
+    - El "ENFADO" de tu novia no puede llegar a 100, sino te dejará y tus suegros montarán una fiesta.
+    - Llamaremos a los puntos de experiencia "Puntos de Amor" o "PA"\n''')
+            
+prota.subir_nivel(0)
+prota.ganar_experiencia(0, dificultad)
+continuar()
+
+# CREACIÓN DE NPC
+suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo = personajes_segun_dificultad(dificultad)
+
+lista_npc_aliados = [padre, madre, abuelo, abuela, hermano, hermana, amigo, amiga, compañero_clase, compañera_clase, perro, gato]
+lista_npc_enemigos = [suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo]
+
+# CREACIÓN DE EVENTOS
+crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
+print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
+for indice, npc in enumerate(lista_npc_totales):
+    print(f"{indice}- Nombre: {npc.nombre}")
 # _________________________________________________________________________________________________________________________
 
 # Loop Juego
 while juego_iniciado: 
-    if prota.nivel == 0:
-        
-        print(f'''\nEncantado {nombre_prota}. Soy cupido, te pongo en situación: \n
-    Tu novia, {nombre_novia}, te ha dicho que la has cagado, pero no sabes el porqué. 
-    Su respuesta a tu ignorancia es contundente: "Tú sabrás". 
-    Así que decides investigar para arreglarlo. \n
-    Te encontrarás con enemigos que frenarán tu búsqueda y aliados que te darán 
-    herramientas para mitigar la furia de tu novia. \n
-    ¿Conseguirás adivinar por qué se enfadó? 
-    Y, lo más importante, \n
-    ¿Conseguirás arreglarlo?\n
-    Buena suerte, la vas a necesitar.\n''')
-        
-        dificultad = seleccion_dificultad()
-
-        # CREACIÓN DE BOSS
-        if dificultad == 1:
-            novia = Boss(nombre = nombre_novia, energia = 100, empatia = 0, dialectica = 2, enfado = 20, nivel = 0, paciencia = 0, estado = sin_estado)
-            novia.subir_nivel()
-        elif dificultad == 2:
-            novia = Boss(nombre = nombre_novia, energia = 125, empatia = 0, dialectica = 3, enfado = 40, nivel = 0, paciencia = 1, estado = sin_estado)
-            novia.subir_nivel()
-        elif dificultad == 3:
-            novia = Boss(nombre = nombre_novia, energia = 150, empatia = 0, dialectica = 5, enfado = 60, nivel = 1, paciencia = 2, estado = sin_estado)
-            novia.subir_nivel()
-            novia.subir_nivel()
-        elif dificultad == 4:
-            novia = Boss(nombre = nombre_novia, energia = 250, empatia = 0, dialectica = 8, enfado = 80, nivel = 2, paciencia = 3, estado = sin_estado)
-            novia.subir_nivel()
-            novia.subir_nivel()
-
-        # CREACIÓN DE MOTIVO DEL ENFADO
-        lista_posibles_motivos = novia.seleccionar_motivo_y_elementos(dificultad)
-
-        # PROTA NIVEL 1
-        prota.ganar_experiencia(0, dificultad)
-        
-        # CREACIÓN DE NPC
-        suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo = personajes_segun_dificultad(dificultad)
-
-        lista_npc_aliados = [padre, madre, abuelo, abuela, hermano, hermana, amigo, amiga, compañero_clase, compañera_clase, perro, gato]
-        lista_npc_enemigos = [suegro, suegra, cuñado, cuñada, amigo_novia, amiga_novia, abuela_novia, abuelo_novia, ex_novio_reciente, exnovio_antiguo]
-
-
-        # CREACIÓN DE EVENTOS
-        crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
-        print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
-        for indice, npc in enumerate(lista_npc_totales):
-            print(f"- {indice}. Nombre: {npc.nombre}")
 
     if contador_eventos in [7, 14, 21]:    
         encuentro_boss(prota, novia, dificultad, lista_posibles_motivos)
@@ -335,11 +347,11 @@ while juego_iniciado:
         print(f'Has hecho {contador_eventos} eventos. Te quedan {28 - contador_eventos} eventos para adivinarlo.')
         print(f'Esta es la lista de npc totales tras el boss: ')
         for indice, npc in enumerate(lista_npc_totales):
-            print(f"Índice: {indice}, Nombre: {npc.nombre}")
+            print(f"{indice}- Nombre: {npc.nombre}")
         crear_eventos(lista_npc_totales, lista_npc_aliados, lista_npc_enemigos, dificultad)
         print(f'Esta es la lista de personajes con los que te vas a encontrar: \n')
         for indice, npc in enumerate(lista_npc_totales):
-            print(f"Índice: {indice}, Nombre: {npc.nombre}")
+            print(f"{indice}- Nombre: {npc.nombre}")
         print(f'Se han añadido más personajes al juego.')
         contador_eventos += 1
 

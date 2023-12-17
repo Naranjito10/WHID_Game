@@ -191,13 +191,13 @@ class Aliado():
             while eleccion not in ['1', '2']:
                 try:
                     eleccion = input('''\nTu gato está acurrucado en tu cama. ¿Qué haces?\n
-    - 1. Lo agarras y lo mimas hasta que te araña por pesado. (-10 energia, +10 empatía)
-    - 2. Sacas un cordel y juegas con él. (+15 energia, +1 empatía)
+    - 1. Lo agarras y lo mimas hasta que te araña por pesado. (-10 energía, +10 empatía)
+    - 2. Sacas un cordel y juegas con él. (+15 energía, +1 empatía)
     \nTu respuesta: ''')
                 except ValueError:
                     print('Debes escoger un número entre 1 y 2')
             if eleccion == '1':
-                print('Tu gato te ha arañado y pero ha merecido la pena')
+                print('Tu gato te ha arañado pero ha merecido la pena')
                 personaje.energia -= 10
                 personaje.empatia += 10
                 print(f'Ahora tu ENERGÍA es {personaje.energia} y tu EMPATÍA es {personaje.empatia}.')

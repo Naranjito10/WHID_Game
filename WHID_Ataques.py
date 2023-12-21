@@ -1,4 +1,16 @@
 import random
+import os
+
+# CONTINUAR
+def continuar():
+    continuar = '0'
+    while continuar != '':
+        try:
+            continuar = input('\n- - - ||| @ @ @ PARA CONTINUAR PULSA ENTER @ @ @ ||| - - -:  ')
+        except ValueError:
+            print('Debes pulsar "ENTER')
+            continue
+    os.system('cls')
 
 class Estado: 
     def __init__(self, nombre: str, probabilidad_afectar: int, probabilidad_trigger: int, contador: int, daño: int = 0, efecto: str = ''):
@@ -55,26 +67,45 @@ class Estado:
         self.efecto = ''
 
 # ESTADOS Y ATAQUES
-quemado_enemigos = Estado(nombre = 'Quemado', probabilidad_afectar = 0.9, probabilidad_trigger = 0.30, contador = 1, daño = 2, efecto = 'Reducir daño')
-paralizado_enemigos = Estado(nombre = 'Paralizado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.30, contador = 1, efecto = 'Stun')
-envenenado_enemigos = Estado(nombre = 'Envenenado', probabilidad_afectar = 0.9, probabilidad_trigger = 0.30, contador = 1, daño = 5, efecto = 'Veneno')
-sofocado_enemigos = Estado(nombre = 'Sofocado', probabilidad_afectar = 0.8, probabilidad_trigger = 0.30, contador = 1, daño = 5, efecto = 'Bajar armadura')
 
-quemado_prota = Estado(nombre = 'Quemado', probabilidad_afectar = 0.9, probabilidad_trigger = 0.30, contador = 1, daño = 2, efecto = 'Reducir daño')
-paralizado_prota = Estado(nombre = 'Paralizado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.30, contador = 1, efecto = 'Stun')
-envenenado_prota = Estado(nombre = 'Envenenado', probabilidad_afectar = 0.9, probabilidad_trigger = 0.30, contador = 1, daño = 5, efecto = 'Veneno')
-sofocado_prota = Estado(nombre = 'Sofocado', probabilidad_afectar = 0.8, probabilidad_trigger = 0.30, contador = 1, daño = 5, efecto = 'Bajar armadura')
+# Afectan a los enemigos (lo hace el prota)
+quemado_enemigos = Estado(nombre = 'Quemado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Reducir daño')
+paralizado_enemigos = Estado(nombre = 'Paralizado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 3, efecto = 'Stun')
+cegado_enemigos = Estado(nombre = 'Cegado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, efecto = 'Stun')
+envenenado_enemigos = Estado(nombre = 'Envenenado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 5, efecto = 'Veneno')
+sofocado_enemigos = Estado(nombre = 'Sofocado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Bajar armadura')
+silenciado_enemigos = Estado(nombre = 'Silenciado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Efecto no afecta')
+# _______________ lo hacen los propios enemigos
+dobla_ataque_enemigos = Estado(nombre = 'Dobla ataque', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Dobla ataque')
+cura_ataque_enemigos = Estado(nombre = 'Cura ataque', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Cura ataque')
+defensa_enemigos = Estado(nombre = 'Cura ataque', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Defensa')
 
+
+# Afectan al prota (lo hacen los enemigos)
+quemado_prota = Estado(nombre = 'Quemado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Reducir daño')
+paralizado_prota = Estado(nombre = 'Paralizado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 3, efecto = 'Stun')
+cegado_prota = Estado(nombre = 'Cegado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, efecto = 'Stun')
+envenenado_prota = Estado(nombre = 'Envenenado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 5, efecto = 'Veneno')
+sofocado_prota = Estado(nombre = 'Sofocado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 5, efecto = 'Bajar armadura')
+silenciado_prota = Estado(nombre = 'Silenciado', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Efecto no afecta')
+toxico_prota = Estado(nombre = 'Tóxico', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Solo toxicos')
+razonable_prota = Estado(nombre = 'Razonable', probabilidad_afectar = 0.7, probabilidad_trigger = 0.5, contador = 1, daño = 2, efecto = 'Solo razonables')
+# _______________ (lo hace el prota)
+dobla_ataque_prota = Estado(nombre = 'Ataque doble', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Dobla ataque')
+cura_ataque_prota = Estado(nombre = 'Curación leve', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Cura ataque')
+empatico_prota = Estado(nombre = 'Augmento empático', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Empatico ataque')
+defensa_prota = Estado(nombre = 'Defensa férrea', probabilidad_afectar = 0.7, probabilidad_trigger = 1, contador = 1, efecto = 'Defensa')
+
+# _______________ SIN ESTADO
 sin_estado = Estado(nombre = 'Sin estado', probabilidad_afectar = 0, probabilidad_trigger = 0, contador = 0, daño = 0, efecto = 'Sin efecto')
 
-efectos = ['Reducir daño', 'Stun', 'Veneno', 'Sofocado']
+# efectos = ['Reducir daño', 'Stun', 'Veneno', 'Sofocado', 'Ataque no afecta', 'Efecto no afecta', 'Solo toxicos', 'Solo razonables', 'Dobla ataque', 'Cura ataque']
 
 # _________________________________________________________________________________________________________________________
 
 # CLASE DE ATAQUE
 class Ataque: 
-    contador_id = 1
-    # lista_ataques_totales = []    
+    contador_id = 1    
 
     def __init__(self, nombre: str, daño: int, estado: str = sin_estado, enfado: int = 0):
         self.id = Ataque.contador_id  # Asigna el id actual y luego incrementa el contador
@@ -83,10 +114,12 @@ class Ataque:
         self.daño = daño
         self.estado = estado
         self.enfado = enfado
-        # self.lista_ataques_totales.append(Ataque)
+        # self.habilidad_ataque = habilidad_ataque
 
-    def get_lista_ataques_totales(self):
-        return self.lista_ataques_totales
+    def seleccion_habilidad_ataque(self, daño):
+        if self.habilidad_ataque == 'Cura ataque':
+            self.curar_vida(daño//2)
+        
 
 # _________________________________________________________________________________________________________________________
 
@@ -118,176 +151,295 @@ def lista_ataques_desordenada():
     AtaqueProta(nombre = '"Entiendo que estés preocupada, pero dime por favor qué está sucediendo para poder ayudarte."', 
                 daño = 0.5, 
                 empatia = 5, 
-                categoria = 'arg_razonable', 
+                categoria = 'Argumento razonable', 
                 nivel = 0, 
-                estado = quemado_enemigos, 
+                estado = sin_estado, 
                 enfado = 0),
     AtaqueProta(nombre = '"No sé qué he hecho.”', 
-                daño = 0.5, 
-                empatia = 0, 
-                categoria = 'arg_cutre', 
+                daño = 0.75, 
+                empatia = -7, 
+                categoria = 'Argumento cutre', 
                 nivel = 0, 
                 estado = paralizado_enemigos, 
                 enfado = 0),
     AtaqueProta(nombre = '"Creo que es culpa tuya."', 
                 daño = 1, 
-                empatia = -5, 
-                categoria = 'arg_toxico', 
+                empatia = -15, 
+                categoria = 'Argumento tóxico', 
                 nivel = 0, 
                 estado = envenenado_enemigos, 
-                enfado = 0),
+                enfado = 1),
     AtaqueProta(nombre = '"Te escucho."', 
-                daño = 0.5, 
-                empatia = 10, 
-                categoria = 'acc_amistosa', 
+                daño = 0.75, 
+                empatia = 2, 
+                categoria = 'Acción amistosa', 
                 nivel = 0, 
-                estado = quemado_enemigos, 
+                estado = sin_estado, 
                 enfado = 0),
     # NIVEL 1
     AtaqueProta(nombre = '"Resultaría más sencillo resolver este problema si me dijeras de donde viene el enfado."', 
-                daño = 1.5, 
-                empatia = 10, 
-                categoria = 'arg_razonable', 
+                daño = 1, 
+                empatia = 5, 
+                categoria = 'Argumento razonable', 
                 nivel = 1, 
-                estado = paralizado_enemigos, 
+                estado = sin_estado, 
                 enfado = 1),
     AtaqueProta(nombre = '"Creo que no he hecho nada mal."', 
-                daño = 2, 
-                empatia = 10, 
-                categoria = 'arg_cutre', 
+                daño = 1, 
+                empatia = -10, 
+                categoria = 'Argumento cutre', 
+                nivel = 1, 
+                estado = envenenado_enemigos, 
+                enfado = 0),
+    AtaqueProta(nombre = '"¿Estás segura de lo que estás diciendo?"', 
+                daño = 1.75, 
+                empatia = -15, 
+                categoria = 'Argumento tóxico', 
                 nivel = 1, 
                 estado = envenenado_enemigos, 
                 enfado = 2),
-    AtaqueProta(nombre = '"¿Estás segura de lo que estás diciendo?"', 
-                daño = 2.5, 
-                empatia = 10, 
-                categoria = 'arg_toxico', 
-                nivel = 1, 
-                estado = quemado_enemigos, 
-                enfado = 6),
     AtaqueProta(nombre = '"Escuchas activamente."', 
-                daño = 2, 
-                empatia = 10, 
-                categoria = 'acc_amistosa', 
+                daño = 1.25, 
+                empatia = 3, 
+                categoria = 'Acción amistosa', 
                 nivel = 1, 
-                estado = paralizado_enemigos, 
+                estado = sin_estado, 
                 enfado = 0),
     # NIVEL 2
     AtaqueProta(nombre = '"Sé que a veces puedo parecer distante, pero quiero luchar para mejorar nuestra comunicación."', 
-                daño = 2, 
+                daño = 1.5, 
                 empatia = 10, 
-                categoria = 'arg_razonable', 
+                categoria = 'Argumento razonable', 
                 nivel = 2, 
-                estado = envenenado_enemigos, 
+                estado = sin_estado, 
                 enfado = 0),
     AtaqueProta(nombre = '"Lo siento."', 
-                daño = 2, 
+                daño = 1.5, 
                 empatia = 0, 
-                categoria = 'arg_cutre', 
+                categoria = 'Argumento cutre', 
                 nivel = 2, 
                 estado = quemado_enemigos, 
                 enfado = 0),
     AtaqueProta(nombre = '"Sí cariño, tienes toooooda la razón.”', 
-                daño = 3, 
-                empatia = -10, 
-                categoria = 'arg_toxico', 
+                daño = 2.5, 
+                empatia = -20, 
+                categoria = 'Argumento tóxico', 
                 nivel = 2, 
                 estado = envenenado_enemigos, 
                 enfado = 0),
     AtaqueProta(nombre = '"¿Te gustaría pasar un tiempo especial juntos este fin de semana?"',
-                daño = 2.5,
+                daño = 2,
                 empatia = 5,
-                categoria = 'acc_amistosa',
+                categoria = 'Acción amistosa',
                 nivel = 2,
-                estado = paralizado_enemigos,
+                estado = sin_estado,
                 enfado = 0),
     # NIVEL 3
     AtaqueProta(nombre = '"No quería hacerte daño."', 
-                daño = 2, 
-                empatia = 0, 
-                categoria = 'arg_cutre', 
-                nivel = 3, 
-                estado = paralizado_enemigos, 
-                enfado = 0),
-    AtaqueProta(nombre = '"Apoyas su argumento amistosamente."', 
-                daño = 3, 
-                empatia = 5, 
-                categoria = 'acc_amistosa', 
+                daño = 2.5, 
+                empatia = -5, 
+                categoria = 'Argumento cutre', 
                 nivel = 3, 
                 estado = quemado_enemigos, 
                 enfado = 0),
+    AtaqueProta(nombre = '"Apoyas su argumento amistosamente."', 
+                daño = 3, 
+                empatia = 10, 
+                categoria = 'Acción amistosa', 
+                nivel = 3, 
+                estado = sin_estado, 
+                enfado = 0),
     AtaqueProta(nombre = '"No me gusta que me hables así."',
                 daño = 3.5, 
-                empatia = -10, 
-                categoria = 'arg_toxico', 
+                empatia = -30, 
+                categoria = 'Argumento tóxico', 
                 nivel = 3, 
                 estado = envenenado_enemigos, 
                 enfado = 0),
     AtaqueProta(nombre = '"He notado que ha habido un cambio entre nosotros... ¿Hay algo en particular que te haya molestado?"',
                 daño = 2,
                 empatia = 10,
-                categoria = 'arg_razonable',
+                categoria = 'Argumento razonable',
                 nivel = 3,
-                estado = paralizado_enemigos,
-                enfado = -8),
+                estado = sin_estado,
+                enfado = -5),
     # NIVEL 4
     AtaqueProta(nombre = '"Te quiero."', 
                 daño = 2.5, 
-                empatia = 10, 
-                categoria = 'arg_cutre', 
+                empatia = 0, 
+                categoria = 'Argumento cutre', 
                 nivel = 4, 
-                estado = quemado_enemigos, 
-                enfado = 0),
+                estado = sin_estado, 
+                enfado = -1),
     AtaqueProta(nombre = '"Repites lo que ha dicho la otra persona para demostrar que estás atento."',
                 daño = 3.5,
-                empatia = 15,
-                categoria = 'acc_amistosa',
+                empatia = 10,
+                categoria = 'Acción amistosa',
                 nivel = 4,
                 estado = paralizado_enemigos,
                 enfado = 0),
     AtaqueProta(nombre = '"No entiendo por qué siempre encuentras algo de qué quejarte. "',
-                daño = 4, 
-                empatia = -10, 
-                categoria = 'arg_toxico', 
+                daño = 3, 
+                empatia = -30, 
+                categoria = 'Argumento tóxico', 
                 nivel = 4, 
                 estado = envenenado_enemigos, 
-                enfado = 0),
+                enfado = 5),
     AtaqueProta(nombre = '"¿Hacemos un puzzle juntos? Quiero hacer un esfuerzo adicional para fortalecer nuestra conexión."',
                 daño = 2.5,
                 empatia = 15,
-                categoria = 'arg_razonable',
+                categoria = 'Argumento razonable',
                 nivel = 4,
-                estado = paralizado_enemigos,
+                estado = sin_estado,
                 enfado = 0),
     # NIVEL 5
     AtaqueProta(nombre = '"Nuestras decisiones impactan el futuro directamente. ¿Qué podemos hacer para mejorar nuestra relación a largo plazo?”"',
-                daño = 3.5,
-                empatia = 20,
-                categoria = 'arg_razonable',
+                daño = 3,
+                empatia = 30,
+                categoria = 'Argumento razonable',
                 nivel = 5,
                 estado = paralizado_enemigos,
                 enfado = 0),
     AtaqueProta(nombre = '"Me interesa entender mejor tu punto de vista. ¿Podrías explicarme más sobre tus experiencias y cómo llegaste a esa conclusión?"',
-                daño = 4.5,
-                empatia = 10,
-                categoria = 'acc_amistosa',
+                daño = 3.5,
+                empatia = 15,
+                categoria = 'Acción amistosa',
                 nivel = 5,
                 estado = paralizado_enemigos,
                 enfado = 0),
     AtaqueProta(nombre = '"Estuve revisando tu Whatsapp y parece que eres tú la que me debe una explicación… ¿Quién es "Paco Fontanero"?"',
-                daño = 5.5, 
-                empatia = -20, 
-                categoria = 'arg_toxico', 
+                daño = 4.5, 
+                empatia = -50, 
+                categoria = 'Argumento tóxico', 
                 nivel = 5, 
                 estado = envenenado_enemigos, 
-                enfado = 0),
+                enfado = 8),
     AtaqueProta(nombre = '"¡No sé de qué estás hablando!"',
-                daño = 4.5,
-                empatia = -5,
-                categoria = 'arg_cutre',
+                daño = 3.5,
+                empatia = -20,
+                categoria = 'Argumento cutre',
                 nivel = 5,
                 estado = quemado_enemigos,
+                enfado = 0),    
+    
+    # NIVEL 6
+    AtaqueProta(nombre = '"Nuestras decisiones impactan el futuro directamente. ¿Qué podemos hacer para mejorar nuestra relación a largo plazo?”"',
+                daño = 3,
+                empatia = 30,
+                categoria = 'Argumento razonable',
+                nivel = 6,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Me interesa entender mejor tu punto de vista. ¿Podrías explicarme más sobre tus experiencias y cómo llegaste a esa conclusión?"',
+                daño = 3.5,
+                empatia = 15,
+                categoria = 'Acción amistosa',
+                nivel = 6,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Estuve revisando tu Whatsapp y parece que eres tú la que me debe una explicación… ¿Quién es "Paco Fontanero"?"',
+                daño = 4.5, 
+                empatia = -50, 
+                categoria = 'Argumento tóxico', 
+                nivel = 6, 
+                estado = envenenado_enemigos, 
+                enfado = 8),
+    AtaqueProta(nombre = '"¡No sé de qué estás hablando!"',
+                daño = 3.5,
+                empatia = -20,
+                categoria = 'Argumento cutre',
+                nivel = 6,
+                estado = quemado_enemigos,
+                enfado = 0),    
+    # NIVEL 7
+    AtaqueProta(nombre = '"Nuestras decisiones impactan el futuro directamente. ¿Qué podemos hacer para mejorar nuestra relación a largo plazo?”"',
+                daño = 3,
+                empatia = 30,
+                categoria = 'Argumento razonable',
+                nivel = 7,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Me interesa entender mejor tu punto de vista. ¿Podrías explicarme más sobre tus experiencias y cómo llegaste a esa conclusión?"',
+                daño = 3.5,
+                empatia = 15,
+                categoria = 'Acción amistosa',
+                nivel = 7,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Estuve revisando tu Whatsapp y parece que eres tú la que me debe una explicación… ¿Quién es "Paco Fontanero"?"',
+                daño = 4.5, 
+                empatia = -50, 
+                categoria = 'Argumento tóxico', 
+                nivel = 7, 
+                estado = envenenado_enemigos, 
+                enfado = 8),
+    AtaqueProta(nombre = '"¡No sé de qué estás hablando!"',
+                daño = 3.5,
+                empatia = -20,
+                categoria = 'Argumento cutre',
+                nivel = 7,
+                estado = quemado_enemigos,
+                enfado = 0),    
+    # NIVEL 8
+    AtaqueProta(nombre = '"Nuestras decisiones impactan el futuro directamente. ¿Qué podemos hacer para mejorar nuestra relación a largo plazo?”"',
+                daño = 3,
+                empatia = 30,
+                categoria = 'Argumento razonable',
+                nivel = 8,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Me interesa entender mejor tu punto de vista. ¿Podrías explicarme más sobre tus experiencias y cómo llegaste a esa conclusión?"',
+                daño = 3.5,
+                empatia = 15,
+                categoria = 'Acción amistosa',
+                nivel = 8,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Estuve revisando tu Whatsapp y parece que eres tú la que me debe una explicación… ¿Quién es "Paco Fontanero"?"',
+                daño = 4.5, 
+                empatia = -50, 
+                categoria = 'Argumento tóxico', 
+                nivel = 8, 
+                estado = envenenado_enemigos, 
+                enfado = 8),
+    AtaqueProta(nombre = '"¡No sé de qué estás hablando!"',
+                daño = 3.5,
+                empatia = -20,
+                categoria = 'Argumento cutre',
+                nivel = 8,
+                estado = quemado_enemigos,
+                enfado = 0),    
+    # NIVEL 9
+    AtaqueProta(nombre = '"Nuestras decisiones impactan el futuro directamente. ¿Qué podemos hacer para mejorar nuestra relación a largo plazo?”"',
+                daño = 3,
+                empatia = 30,
+                categoria = 'Argumento razonable',
+                nivel = 9,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Me interesa entender mejor tu punto de vista. ¿Podrías explicarme más sobre tus experiencias y cómo llegaste a esa conclusión?"',
+                daño = 3.5,
+                empatia = 15,
+                categoria = 'Acción amistosa',
+                nivel = 9,
+                estado = paralizado_enemigos,
+                enfado = 0),
+    AtaqueProta(nombre = '"Estuve revisando tu Whatsapp y parece que eres tú la que me debe una explicación… ¿Quién es "Paco Fontanero"?"',
+                daño = 4.5, 
+                empatia = -50, 
+                categoria = 'Argumento tóxico', 
+                nivel = 9, 
+                estado = envenenado_enemigos, 
+                enfado = 8),
+    AtaqueProta(nombre = '"¡No sé de qué estás hablando!"',
+                daño = 3.5,
+                empatia = -20,
+                categoria = 'Argumento cutre',
+                nivel = 9,
+                estado = quemado_enemigos,
                 enfado = 0)    
+
+    
     ]
 
     random.shuffle(lista_ataques) 
@@ -303,18 +455,21 @@ def seleccionar_habilidad_borrar():
         lista_numeros.append(numero1)
     else: 
         opcion1 = 'No hay habilidades en esta categoría'
+
     if len(AtaqueProta.arg_razonable) != 0:
         opcion2 = random.choice(AtaqueProta.arg_razonable)
         numero2 = 2
         lista_numeros.append(numero2)
     else: 
         opcion2 = 'No hay habilidades en esta categoría'
+
     if len(AtaqueProta.arg_toxico) != 0:
         opcion3 = random.choice(AtaqueProta.arg_toxico)
         numero3 = 3
         lista_numeros.append(numero3)
     else:
         opcion3 = 'No hay habilidades en esta categoría'
+
     if len(AtaqueProta.acc_amistosa) != 0:
         opcion4 = random.choice(AtaqueProta.acc_amistosa)
         numero4 = 4
@@ -325,29 +480,29 @@ def seleccionar_habilidad_borrar():
     while opcion_escogida not in lista_numeros:
         try:
             opcion_escogida = int(input(f'''¿Qué habilidad quieres borrar?:\n
-    - 1. {opcion1}
-    - 2. {opcion2}
-    - 3. {opcion3}
-    - 4. {opcion4}
-    \nEscoge tu respuesta: '''))
+    - 1: {opcion1}\n
+    - 2: {opcion2}\n
+    - 3: {opcion3}\n
+    - 4: {opcion4}\n
+    Escoge tu respuesta: '''))
         except ValueError:
             print('Por favor, introduce un número válido.')
 
     if opcion_escogida == 1:
         AtaqueProta.arg_cutre.remove(opcion1)
-        print(f'Muy bien, has borrado la habilidad {opcion1.nombre} en la categoría {opcion1.categoria}')
+        print(f'\nMuy bien, has borrado la habilidad {opcion1.nombre} en la categoría {opcion1.categoria}')
 
     elif opcion_escogida == 2:
         AtaqueProta.arg_razonable.remove(opcion2)
-        print(f'Muy bien, has borrado la habilidad {opcion2.nombre} en la categoría {opcion2.categoria}')
+        print(f'\nMuy bien, has borrado la habilidad {opcion2.nombre} en la categoría {opcion2.categoria}')
 
     elif opcion_escogida == 3:
         AtaqueProta.arg_toxico.remove(opcion3)
-        print(f'Muy bien, has borrado la habilidad {opcion3.nombre} en la categoría {opcion3.categoria}')
+        print(f'\nMuy bien, has borrado la habilidad {opcion3.nombre} en la categoría {opcion3.categoria}')
     
     elif opcion_escogida == 4:
         AtaqueProta.acc_amistosa.remove(opcion4)
-        print(f'Muy bien, has borrado la habilidad {opcion4.nombre} en la categoría {opcion4.categoria}')
+        print(f'\nMuy bien, has borrado la habilidad {opcion4.nombre} en la categoría {opcion4.categoria}')
 
 # PROTA - CREAR GENERADOR DE ATAQUES POR NIVEL
 def crear_ataque_nivel(nivel): 
@@ -379,23 +534,23 @@ def seleccionar_nuevo_ataque(nivel):
         if opcion_escogida == '1':
             lista_ataques_utilizados.append(clase1)
             añadir_habilidad_categoria(clase1)
-            print(f'Muy bien, has añadido la habilidad {clase1.nombre} en la categoría {clase1.categoria}')
+            print(f'\nMuy bien, has añadido la habilidad {clase1.nombre} en la categoría {clase1.categoria}')
 
         elif opcion_escogida == '2':
             lista_ataques_utilizados.append(clase2)
             añadir_habilidad_categoria(clase2)
-            print(f'Muy bien, has añadido la habilidad {clase2.nombre} en la categoría {clase2.categoria}')
+            print(f'\nMuy bien, has añadido la habilidad {clase2.nombre} en la categoría {clase2.categoria}')
 
 # PROTA - AÑADIR HABILIDAD A LA CATEGORÍA 
 def añadir_habilidad_categoria(generador):
     categoria = generador.categoria
-    if categoria == 'arg_cutre':
+    if categoria == 'Argumento cutre':
         AtaqueProta.arg_cutre.append(generador)
-    elif categoria == 'arg_razonable':
+    elif categoria == 'Argumento razonable':
         AtaqueProta.arg_razonable.append(generador)
-    elif categoria == 'arg_toxico':
+    elif categoria == 'Argumento tóxico':
         AtaqueProta.arg_toxico.append(generador)
-    elif categoria == 'acc_amistosa':
+    elif categoria == 'Acción amistosa':
         AtaqueProta.acc_amistosa.append(generador)
     
 
@@ -432,6 +587,28 @@ def lista_ataques_boss_desordenada():
     AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 2, estado = sofocado_prota, enfado = 1),
     AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 2, estado = paralizado_prota, enfado = 1),
     AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 2, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Tu sabrás lo que has hecho"', daño = 0.5, nivel = 3, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 3, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 3, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 3, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me hables"', daño = 0.5, nivel = 3, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 4, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 4, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 4, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me hables"', daño = 0.5, nivel = 4, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 5, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 5, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 5, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me hables"', daño = 0.5, nivel = 5, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 6, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 6, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 6, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me hables"', daño = 0.5, nivel = 6, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Ok”"', daño = 0.5, nivel = 7, estado = sofocado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado"', daño = 0.5, nivel = 7, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"Corazón helado extreme"', daño = 2, nivel = 7, estado = paralizado_prota, enfado = 1),
+    AtaqueBoss(nombre = '"No me hables"', daño = 0.5, nivel = 7, estado = paralizado_prota, enfado = 1),
+    
     ]
     random.shuffle(lista_ataques) 
     return lista_ataques
@@ -473,5 +650,5 @@ class AtaqueEnemigo(Ataque):
     def __str__(self):
         return f"Ataque: {self.nombre}, Daño: {self.daño}, Estado: {self.estado}"
 
-
+# TODO esto afecta en algo???????
 stun_activado = Ataque(nombre = 'stun_activado', daño = 0, estado = sin_estado, enfado = 0)
